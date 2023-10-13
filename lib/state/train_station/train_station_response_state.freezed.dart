@@ -19,7 +19,8 @@ mixin _$TrainStationResponseState {
 //
   List<TrainStation> get stationList => throw _privateConstructorUsedError; //
   Map<String, TrainStation> get stationNameMap =>
-      throw _privateConstructorUsedError;
+      throw _privateConstructorUsedError; //
+  TrainStation? get selectedTrainStation => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $TrainStationResponseStateCopyWith<TrainStationResponseState> get copyWith =>
@@ -34,7 +35,8 @@ abstract class $TrainStationResponseStateCopyWith<$Res> {
   @useResult
   $Res call(
       {List<TrainStation> stationList,
-      Map<String, TrainStation> stationNameMap});
+      Map<String, TrainStation> stationNameMap,
+      TrainStation? selectedTrainStation});
 }
 
 /// @nodoc
@@ -53,6 +55,7 @@ class _$TrainStationResponseStateCopyWithImpl<$Res,
   $Res call({
     Object? stationList = null,
     Object? stationNameMap = null,
+    Object? selectedTrainStation = freezed,
   }) {
     return _then(_value.copyWith(
       stationList: null == stationList
@@ -63,6 +66,10 @@ class _$TrainStationResponseStateCopyWithImpl<$Res,
           ? _value.stationNameMap
           : stationNameMap // ignore: cast_nullable_to_non_nullable
               as Map<String, TrainStation>,
+      selectedTrainStation: freezed == selectedTrainStation
+          ? _value.selectedTrainStation
+          : selectedTrainStation // ignore: cast_nullable_to_non_nullable
+              as TrainStation?,
     ) as $Val);
   }
 }
@@ -78,7 +85,8 @@ abstract class _$$TrainStationResponseStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {List<TrainStation> stationList,
-      Map<String, TrainStation> stationNameMap});
+      Map<String, TrainStation> stationNameMap,
+      TrainStation? selectedTrainStation});
 }
 
 /// @nodoc
@@ -96,6 +104,7 @@ class __$$TrainStationResponseStateImplCopyWithImpl<$Res>
   $Res call({
     Object? stationList = null,
     Object? stationNameMap = null,
+    Object? selectedTrainStation = freezed,
   }) {
     return _then(_$TrainStationResponseStateImpl(
       stationList: null == stationList
@@ -106,6 +115,10 @@ class __$$TrainStationResponseStateImplCopyWithImpl<$Res>
           ? _value._stationNameMap
           : stationNameMap // ignore: cast_nullable_to_non_nullable
               as Map<String, TrainStation>,
+      selectedTrainStation: freezed == selectedTrainStation
+          ? _value.selectedTrainStation
+          : selectedTrainStation // ignore: cast_nullable_to_non_nullable
+              as TrainStation?,
     ));
   }
 }
@@ -115,7 +128,8 @@ class __$$TrainStationResponseStateImplCopyWithImpl<$Res>
 class _$TrainStationResponseStateImpl implements _TrainStationResponseState {
   const _$TrainStationResponseStateImpl(
       {final List<TrainStation> stationList = const [],
-      final Map<String, TrainStation> stationNameMap = const {}})
+      final Map<String, TrainStation> stationNameMap = const {},
+      this.selectedTrainStation})
       : _stationList = stationList,
         _stationNameMap = stationNameMap;
 
@@ -141,9 +155,13 @@ class _$TrainStationResponseStateImpl implements _TrainStationResponseState {
     return EqualUnmodifiableMapView(_stationNameMap);
   }
 
+//
+  @override
+  final TrainStation? selectedTrainStation;
+
   @override
   String toString() {
-    return 'TrainStationResponseState(stationList: $stationList, stationNameMap: $stationNameMap)';
+    return 'TrainStationResponseState(stationList: $stationList, stationNameMap: $stationNameMap, selectedTrainStation: $selectedTrainStation)';
   }
 
   @override
@@ -154,14 +172,17 @@ class _$TrainStationResponseStateImpl implements _TrainStationResponseState {
             const DeepCollectionEquality()
                 .equals(other._stationList, _stationList) &&
             const DeepCollectionEquality()
-                .equals(other._stationNameMap, _stationNameMap));
+                .equals(other._stationNameMap, _stationNameMap) &&
+            (identical(other.selectedTrainStation, selectedTrainStation) ||
+                other.selectedTrainStation == selectedTrainStation));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_stationList),
-      const DeepCollectionEquality().hash(_stationNameMap));
+      const DeepCollectionEquality().hash(_stationNameMap),
+      selectedTrainStation);
 
   @JsonKey(ignore: true)
   @override
@@ -174,13 +195,16 @@ class _$TrainStationResponseStateImpl implements _TrainStationResponseState {
 abstract class _TrainStationResponseState implements TrainStationResponseState {
   const factory _TrainStationResponseState(
           {final List<TrainStation> stationList,
-          final Map<String, TrainStation> stationNameMap}) =
+          final Map<String, TrainStation> stationNameMap,
+          final TrainStation? selectedTrainStation}) =
       _$TrainStationResponseStateImpl;
 
   @override //
   List<TrainStation> get stationList;
   @override //
   Map<String, TrainStation> get stationNameMap;
+  @override //
+  TrainStation? get selectedTrainStation;
   @override
   @JsonKey(ignore: true)
   _$$TrainStationResponseStateImplCopyWith<_$TrainStationResponseStateImpl>

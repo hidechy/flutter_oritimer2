@@ -20,7 +20,9 @@ mixin _$TrainCompanyResponseState {
   List<TrainCompany> get trainCompanyList =>
       throw _privateConstructorUsedError; //
   Map<String, List<Train>> get companyTrainMap =>
-      throw _privateConstructorUsedError;
+      throw _privateConstructorUsedError; //
+  String get selectedCompanyName => throw _privateConstructorUsedError; //
+  String get selectedTrainNumber => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $TrainCompanyResponseStateCopyWith<TrainCompanyResponseState> get copyWith =>
@@ -35,7 +37,9 @@ abstract class $TrainCompanyResponseStateCopyWith<$Res> {
   @useResult
   $Res call(
       {List<TrainCompany> trainCompanyList,
-      Map<String, List<Train>> companyTrainMap});
+      Map<String, List<Train>> companyTrainMap,
+      String selectedCompanyName,
+      String selectedTrainNumber});
 }
 
 /// @nodoc
@@ -54,6 +58,8 @@ class _$TrainCompanyResponseStateCopyWithImpl<$Res,
   $Res call({
     Object? trainCompanyList = null,
     Object? companyTrainMap = null,
+    Object? selectedCompanyName = null,
+    Object? selectedTrainNumber = null,
   }) {
     return _then(_value.copyWith(
       trainCompanyList: null == trainCompanyList
@@ -64,6 +70,14 @@ class _$TrainCompanyResponseStateCopyWithImpl<$Res,
           ? _value.companyTrainMap
           : companyTrainMap // ignore: cast_nullable_to_non_nullable
               as Map<String, List<Train>>,
+      selectedCompanyName: null == selectedCompanyName
+          ? _value.selectedCompanyName
+          : selectedCompanyName // ignore: cast_nullable_to_non_nullable
+              as String,
+      selectedTrainNumber: null == selectedTrainNumber
+          ? _value.selectedTrainNumber
+          : selectedTrainNumber // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -79,7 +93,9 @@ abstract class _$$TrainCompanyResponseStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {List<TrainCompany> trainCompanyList,
-      Map<String, List<Train>> companyTrainMap});
+      Map<String, List<Train>> companyTrainMap,
+      String selectedCompanyName,
+      String selectedTrainNumber});
 }
 
 /// @nodoc
@@ -97,6 +113,8 @@ class __$$TrainCompanyResponseStateImplCopyWithImpl<$Res>
   $Res call({
     Object? trainCompanyList = null,
     Object? companyTrainMap = null,
+    Object? selectedCompanyName = null,
+    Object? selectedTrainNumber = null,
   }) {
     return _then(_$TrainCompanyResponseStateImpl(
       trainCompanyList: null == trainCompanyList
@@ -107,6 +125,14 @@ class __$$TrainCompanyResponseStateImplCopyWithImpl<$Res>
           ? _value._companyTrainMap
           : companyTrainMap // ignore: cast_nullable_to_non_nullable
               as Map<String, List<Train>>,
+      selectedCompanyName: null == selectedCompanyName
+          ? _value.selectedCompanyName
+          : selectedCompanyName // ignore: cast_nullable_to_non_nullable
+              as String,
+      selectedTrainNumber: null == selectedTrainNumber
+          ? _value.selectedTrainNumber
+          : selectedTrainNumber // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -116,7 +142,9 @@ class __$$TrainCompanyResponseStateImplCopyWithImpl<$Res>
 class _$TrainCompanyResponseStateImpl implements _TrainCompanyResponseState {
   const _$TrainCompanyResponseStateImpl(
       {final List<TrainCompany> trainCompanyList = const [],
-      final Map<String, List<Train>> companyTrainMap = const {}})
+      final Map<String, List<Train>> companyTrainMap = const {},
+      this.selectedCompanyName = '',
+      this.selectedTrainNumber = ''})
       : _trainCompanyList = trainCompanyList,
         _companyTrainMap = companyTrainMap;
 
@@ -143,9 +171,18 @@ class _$TrainCompanyResponseStateImpl implements _TrainCompanyResponseState {
     return EqualUnmodifiableMapView(_companyTrainMap);
   }
 
+//
+  @override
+  @JsonKey()
+  final String selectedCompanyName;
+//
+  @override
+  @JsonKey()
+  final String selectedTrainNumber;
+
   @override
   String toString() {
-    return 'TrainCompanyResponseState(trainCompanyList: $trainCompanyList, companyTrainMap: $companyTrainMap)';
+    return 'TrainCompanyResponseState(trainCompanyList: $trainCompanyList, companyTrainMap: $companyTrainMap, selectedCompanyName: $selectedCompanyName, selectedTrainNumber: $selectedTrainNumber)';
   }
 
   @override
@@ -156,14 +193,20 @@ class _$TrainCompanyResponseStateImpl implements _TrainCompanyResponseState {
             const DeepCollectionEquality()
                 .equals(other._trainCompanyList, _trainCompanyList) &&
             const DeepCollectionEquality()
-                .equals(other._companyTrainMap, _companyTrainMap));
+                .equals(other._companyTrainMap, _companyTrainMap) &&
+            (identical(other.selectedCompanyName, selectedCompanyName) ||
+                other.selectedCompanyName == selectedCompanyName) &&
+            (identical(other.selectedTrainNumber, selectedTrainNumber) ||
+                other.selectedTrainNumber == selectedTrainNumber));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_trainCompanyList),
-      const DeepCollectionEquality().hash(_companyTrainMap));
+      const DeepCollectionEquality().hash(_companyTrainMap),
+      selectedCompanyName,
+      selectedTrainNumber);
 
   @JsonKey(ignore: true)
   @override
@@ -175,14 +218,19 @@ class _$TrainCompanyResponseStateImpl implements _TrainCompanyResponseState {
 
 abstract class _TrainCompanyResponseState implements TrainCompanyResponseState {
   const factory _TrainCompanyResponseState(
-          {final List<TrainCompany> trainCompanyList,
-          final Map<String, List<Train>> companyTrainMap}) =
-      _$TrainCompanyResponseStateImpl;
+      {final List<TrainCompany> trainCompanyList,
+      final Map<String, List<Train>> companyTrainMap,
+      final String selectedCompanyName,
+      final String selectedTrainNumber}) = _$TrainCompanyResponseStateImpl;
 
   @override //
   List<TrainCompany> get trainCompanyList;
   @override //
   Map<String, List<Train>> get companyTrainMap;
+  @override //
+  String get selectedCompanyName;
+  @override //
+  String get selectedTrainNumber;
   @override
   @JsonKey(ignore: true)
   _$$TrainCompanyResponseStateImplCopyWith<_$TrainCompanyResponseStateImpl>

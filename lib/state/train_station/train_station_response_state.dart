@@ -12,5 +12,8 @@ class TrainStationResponseState with _$TrainStationResponseState {
 
     //
     @Default({}) Map<String, TrainStation> stationNameMap,
+
+    //
+    TrainStation? selectedTrainStation,
   }) = _TrainStationResponseState;
 }

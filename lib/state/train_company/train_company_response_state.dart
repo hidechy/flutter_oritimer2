@@ -12,5 +12,11 @@ class TrainCompanyResponseState with _$TrainCompanyResponseState {
 
     //
     @Default({}) Map<String, List<Train>> companyTrainMap,
+
+    //
+    @Default('') String selectedCompanyName,
+
+    //
+    @Default('') String selectedTrainNumber,
   }) = _TrainCompanyResponseState;
 }

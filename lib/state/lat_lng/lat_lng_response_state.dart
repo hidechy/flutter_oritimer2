@@ -7,7 +7,5 @@ class LatLngResponseState with _$LatLngResponseState {
   const factory LatLngResponseState({
     @Default(0.0) double lat,
     @Default(0.0) double lng,
-    @Default(0.0) double stationLat,
-    @Default(0.0) double stationLng,
   }) = _LatLngResponseState;
 }

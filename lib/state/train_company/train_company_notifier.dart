@@ -39,12 +39,18 @@ class TrainCompanyNotifier extends StateNotifier<TrainCompanyResponseState> {
       }
 
       state = state.copyWith(trainCompanyList: list, companyTrainMap: map);
+    }).catchError((error, _) {
+      utility.showError('予期せぬエラーが発生しました');
     });
-
-    // .catchError((error, _) {
-    //   utility.showError('予期せぬエラーが発生しました');
-    // });
   }
+
+  ///
+  Future<void> setSelectedCompanyName({required String selectedCompanyName}) async =>
+      state = state.copyWith(selectedCompanyName: selectedCompanyName);
+
+  ///
+  Future<void> setSelectedTrainNumber({required String selectedTrainNumber}) async =>
+      state = state.copyWith(selectedTrainNumber: selectedTrainNumber);
 }
 
 ////////////////////////////////////////////////

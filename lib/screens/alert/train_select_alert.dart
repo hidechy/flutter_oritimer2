@@ -1,7 +1,9 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:konoeki_de_oritimer/screens/alert/_oritimer_dialog.dart';
+import 'package:konoeki_de_oritimer/screens/alert/station_select_alert.dart';
 
 import '../../extensions/extensions.dart';
 import '../../state/train_company/train_company_notifier.dart';
@@ -9,11 +11,13 @@ import '../../state/train_company/train_company_notifier.dart';
 class TrainSelectAlert extends ConsumerWidget {
   TrainSelectAlert({super.key});
 
+  late BuildContext _context;
   late WidgetRef _ref;
 
   ///
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    _context = context;
     _ref = ref;
 
     return AlertDialog(
@@ -37,11 +41,13 @@ class TrainSelectAlert extends ConsumerWidget {
                 children: [
                   const Text('Company'),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () =>
+                        _ref.read(trainCompanyProvider.notifier).setSelectedCompanyName(selectedCompanyName: ''),
                     child: const Text('clear'),
                   ),
                 ],
               ),
+              const SizedBox(height: 10),
               Container(
                 height: context.screenSize.height * 0.3,
                 decoration: BoxDecoration(
@@ -51,13 +57,25 @@ class TrainSelectAlert extends ConsumerWidget {
                 child: displayTrainCompany(),
               ),
               const SizedBox(height: 20),
-              const Text('Train'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Train'),
+                  GestureDetector(
+                    onTap: () =>
+                        _ref.read(trainCompanyProvider.notifier).setSelectedTrainNumber(selectedTrainNumber: ''),
+                    child: const Text('clear'),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
               Container(
                 height: context.screenSize.height * 0.45,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.white.withOpacity(0.4)),
                   borderRadius: BorderRadius.circular(16),
                 ),
+                child: displayTrain(),
               ),
             ],
           ),
@@ -70,7 +88,9 @@ class TrainSelectAlert extends ConsumerWidget {
   Widget displayTrainCompany() {
     final list = <Widget>[];
 
-    _ref.watch(trainCompanyProvider.select((value) => value.companyTrainMap)).forEach((key, value) {
+    final selectedCompanyName = _ref.watch(trainCompanyProvider.select((value) => value.selectedCompanyName));
+
+    _ref.watch(trainCompanyProvider.select((value) => value.trainCompanyList)).forEach((element) {
       list.add(
         Container(
           padding: const EdgeInsets.all(10),
@@ -79,13 +99,67 @@ class TrainSelectAlert extends ConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(key),
-              Icon(Icons.check_box_outline_blank_outlined, size: 20, color: Colors.white.withOpacity(0.4)),
+              Text(element.companyName),
+              GestureDetector(
+                onTap: () => _ref
+                    .read(trainCompanyProvider.notifier)
+                    .setSelectedCompanyName(selectedCompanyName: element.companyName),
+                child: (selectedCompanyName == element.companyName)
+                    ? const Icon(Icons.check_box_outlined, size: 20, color: Colors.blueAccent)
+                    : Icon(Icons.check_box_outline_blank_outlined, size: 20, color: Colors.white.withOpacity(0.4)),
+              ),
             ],
           ),
         ),
       );
     });
+
+    return SingleChildScrollView(
+      child: DefaultTextStyle(style: const TextStyle(fontSize: 10), child: Column(children: list)),
+    );
+  }
+
+  ///
+  Widget displayTrain() {
+    final list = <Widget>[];
+
+    final selectedCompanyName = _ref.watch(trainCompanyProvider.select((value) => value.selectedCompanyName));
+
+    if (selectedCompanyName == '') {
+      list.add(Container());
+    } else {
+      final selectedTrainNumber = _ref.watch(trainCompanyProvider.select((value) => value.selectedTrainNumber));
+
+      final companyTrainMap = _ref.watch(trainCompanyProvider.select((value) => value.companyTrainMap));
+
+      companyTrainMap[selectedCompanyName]?.forEach((element) {
+        list.add(
+          Container(
+            padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.only(bottom: 10),
+            decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.white.withOpacity(0.3)))),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(element.trainName),
+                GestureDetector(
+                  onTap: () async {
+                    await _ref
+                        .read(trainCompanyProvider.notifier)
+                        .setSelectedTrainNumber(selectedTrainNumber: element.trainNumber);
+
+                    await OritimerDialog(context: _context, widget: StationSelectAlert(train: element));
+                  },
+                  child: (selectedTrainNumber == element.trainNumber)
+                      ? const Icon(Icons.check_box_outlined, size: 20, color: Colors.blueAccent)
+                      : Icon(Icons.check_box_outline_blank_outlined, size: 20, color: Colors.white.withOpacity(0.4)),
+                ),
+              ],
+            ),
+          ),
+        );
+      });
+    }
 
     return SingleChildScrollView(
       child: DefaultTextStyle(style: const TextStyle(fontSize: 10), child: Column(children: list)),

@@ -44,6 +44,10 @@ class TrainStationNotifier extends StateNotifier<TrainStationResponseState> {
       utility.showError('予期せぬエラーが発生しました');
     });
   }
+
+  ///
+  Future<void> setSelectedTrainStation({required TrainStation station}) async =>
+      state = state.copyWith(selectedTrainStation: station);
 }
 
 ////////////////////////////////////////////////
