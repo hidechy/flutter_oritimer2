@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../extensions/extensions.dart';
-import '../../models/train_company.dart';
 import '../../state/train_company/train_company_notifier.dart';
 
 class TrainSelectAlert extends ConsumerWidget {
@@ -39,7 +38,7 @@ class TrainSelectAlert extends ConsumerWidget {
                   const Text('Company'),
                   GestureDetector(
                     onTap: () {},
-                    child: Text('clear'),
+                    child: const Text('clear'),
                   ),
                 ],
               ),
