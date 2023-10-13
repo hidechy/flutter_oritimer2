@@ -10,13 +10,12 @@ import '../../utility/utility.dart';
 import 'train_station_response_state.dart';
 
 ////////////////////////////////////////////////
-final trainStationProvider =
-    StateNotifierProvider.autoDispose.family<TrainStationNotifier, TrainStationResponseState, String>((ref, param) {
+final trainStationProvider = StateNotifierProvider.autoDispose<TrainStationNotifier, TrainStationResponseState>((ref) {
   final client = ref.watch(httpClientProvider);
 
   final utility = Utility();
 
-  return TrainStationNotifier(const TrainStationResponseState(), client, utility)..getTrainStation(param: param);
+  return TrainStationNotifier(const TrainStationResponseState(), client, utility);
 });
 
 class TrainStationNotifier extends StateNotifier<TrainStationResponseState> {

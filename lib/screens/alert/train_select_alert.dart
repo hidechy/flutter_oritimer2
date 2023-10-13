@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:konoeki_de_oritimer/screens/alert/_oritimer_dialog.dart';
 import 'package:konoeki_de_oritimer/screens/alert/station_select_alert.dart';
+import 'package:konoeki_de_oritimer/state/train_station/train_station_notifier.dart';
 
 import '../../extensions/extensions.dart';
 import '../../state/train_company/train_company_notifier.dart';
@@ -49,6 +50,7 @@ class TrainSelectAlert extends ConsumerWidget {
               ),
               const SizedBox(height: 10),
               Container(
+                width: context.screenSize.width,
                 height: context.screenSize.height * 0.3,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.white.withOpacity(0.35)),
@@ -70,6 +72,7 @@ class TrainSelectAlert extends ConsumerWidget {
               ),
               const SizedBox(height: 10),
               Container(
+                width: context.screenSize.width,
                 height: context.screenSize.height * 0.45,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.white.withOpacity(0.4)),
@@ -125,41 +128,39 @@ class TrainSelectAlert extends ConsumerWidget {
 
     final selectedCompanyName = _ref.watch(trainCompanyProvider.select((value) => value.selectedCompanyName));
 
-    if (selectedCompanyName == '') {
-      list.add(Container());
-    } else {
-      final selectedTrainNumber = _ref.watch(trainCompanyProvider.select((value) => value.selectedTrainNumber));
+    final selectedTrainNumber = _ref.watch(trainCompanyProvider.select((value) => value.selectedTrainNumber));
 
-      final companyTrainMap = _ref.watch(trainCompanyProvider.select((value) => value.companyTrainMap));
+    final companyTrainMap = _ref.watch(trainCompanyProvider.select((value) => value.companyTrainMap));
 
-      companyTrainMap[selectedCompanyName]?.forEach((element) {
-        list.add(
-          Container(
-            padding: const EdgeInsets.all(10),
-            margin: const EdgeInsets.only(bottom: 10),
-            decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.white.withOpacity(0.3)))),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(element.trainName),
-                GestureDetector(
-                  onTap: () async {
-                    await _ref
-                        .read(trainCompanyProvider.notifier)
-                        .setSelectedTrainNumber(selectedTrainNumber: element.trainNumber);
+    companyTrainMap[selectedCompanyName]?.forEach((element) {
+      list.add(
+        Container(
+          padding: const EdgeInsets.all(10),
+          margin: const EdgeInsets.only(bottom: 10),
+          decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.white.withOpacity(0.3)))),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(element.trainName),
+              GestureDetector(
+                onTap: () async {
+                  await _ref
+                      .read(trainCompanyProvider.notifier)
+                      .setSelectedTrainNumber(selectedTrainNumber: element.trainNumber);
 
-                    await OritimerDialog(context: _context, widget: StationSelectAlert(train: element));
-                  },
-                  child: (selectedTrainNumber == element.trainNumber)
-                      ? const Icon(Icons.check_box_outlined, size: 20, color: Colors.blueAccent)
-                      : Icon(Icons.check_box_outline_blank_outlined, size: 20, color: Colors.white.withOpacity(0.4)),
-                ),
-              ],
-            ),
+                  await _ref.read(trainStationProvider.notifier).getTrainStation(param: element.trainNumber);
+
+                  await OritimerDialog(context: _context, widget: StationSelectAlert(train: element));
+                },
+                child: (selectedTrainNumber == element.trainNumber)
+                    ? const Icon(Icons.check_box_outlined, size: 20, color: Colors.blueAccent)
+                    : Icon(Icons.check_box_outline_blank_outlined, size: 20, color: Colors.white.withOpacity(0.4)),
+              ),
+            ],
           ),
-        );
-      });
-    }
+        ),
+      );
+    });
 
     return SingleChildScrollView(
       child: DefaultTextStyle(style: const TextStyle(fontSize: 10), child: Column(children: list)),

@@ -29,7 +29,7 @@ class MapScreen extends ConsumerWidget {
     _context = context;
     _ref = ref;
 
-    _getLocation();
+    getLocation();
 
     final latLngState = ref.watch(latLngProvider);
 
@@ -57,29 +57,40 @@ class MapScreen extends ConsumerWidget {
 
             //---------------------------------------------
             Expanded(
-              child: FlutterMap(
-                options: MapOptions(
-                  center: LatLng(latLngState.lat, latLngState.lng),
-                  zoom: 16,
-                  maxZoom: 17,
-                  minZoom: 3,
-                ),
-                children: [
-                  TileLayer(
-                    urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  ),
-                  // PolylineLayer(
-                  //   polylines: [
-                  //     Polyline(
-                  //       points: polyLineList,
-                  //       color: Colors.redAccent.withOpacity(0.6),
-                  //       strokeWidth: 5,
-                  //     ),
-                  //   ],
-                  // ),
-                  MarkerLayer(markers: markerList),
-                ],
-              ),
+              child: (latLngState.lat > 0 && latLngState.lng > 0)
+                  ? FlutterMap(
+                      options: MapOptions(
+                        center: LatLng(latLngState.lat, latLngState.lng),
+                        zoom: 16,
+                        maxZoom: 17,
+                        minZoom: 3,
+                      ),
+                      children: [
+                        TileLayer(
+                          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        ),
+                        // PolylineLayer(
+                        //   polylines: [
+                        //     Polyline(
+                        //       points: polyLineList,
+                        //       color: Colors.redAccent.withOpacity(0.6),
+                        //       strokeWidth: 5,
+                        //     ),
+                        //   ],
+                        // ),
+                        MarkerLayer(markers: markerList),
+                      ],
+                    )
+                  : Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: const Row(
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(width: 20),
+                          Text('Now Map Calling..'),
+                        ],
+                      ),
+                    ),
             ),
             //---------------------------------------------
 
@@ -139,7 +150,7 @@ class MapScreen extends ConsumerWidget {
   }
 
   ///
-  Future<void> _getLocation() async {
+  Future<void> getLocation() async {
     var permission = await Geolocator.checkPermission();
 
     if (permission == LocationPermission.denied) {

@@ -51,47 +51,46 @@ class StationSelectAlert extends ConsumerWidget {
   Widget displayStation() {
     final list = <Widget>[];
 
-    final selectedTrainStation =
-        _ref.watch(trainStationProvider(train.trainNumber).select((value) => value.selectedTrainStation));
+    if (train.trainNumber != '') {
+      final selectedTrainStation = _ref.watch(trainStationProvider.select((value) => value.selectedTrainStation));
 
-    _ref.watch(trainStationProvider(train.trainNumber).select((value) => value.stationList)).forEach((element) {
-      list.add(Container(
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.only(bottom: 10),
-        decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.white.withOpacity(0.3)))),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(element.stationName),
-                Text(element.address),
-                Text('${element.lat} / ${element.lng}', style: const TextStyle(fontSize: 8)),
-              ],
-            ),
-            GestureDetector(
-              onTap: () async {
-                await _ref
-                    .read(trainStationProvider(train.trainNumber).notifier)
-                    .setSelectedTrainStation(station: element);
-
-                Navigator.pop(_context);
-
-                Navigator.pop(_context);
-              },
-              child: Icon(
-                Icons.input,
-                size: 20,
-                color: (selectedTrainStation != null && selectedTrainStation.stationName == element.stationName)
-                    ? Colors.blueAccent
-                    : Colors.white.withOpacity(0.4),
+      _ref.watch(trainStationProvider.select((value) => value.stationList)).forEach((element) {
+        list.add(Container(
+          padding: const EdgeInsets.all(10),
+          margin: const EdgeInsets.only(bottom: 10),
+          decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.white.withOpacity(0.3)))),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(element.stationName),
+                  Text(element.address),
+                  Text('${element.lat} / ${element.lng}', style: const TextStyle(fontSize: 8)),
+                ],
               ),
-            ),
-          ],
-        ),
-      ));
-    });
+              GestureDetector(
+                onTap: () async {
+                  await _ref.read(trainStationProvider.notifier).setSelectedTrainStation(station: element);
+
+                  Navigator.pop(_context);
+
+                  Navigator.pop(_context);
+                },
+                child: Icon(
+                  Icons.input,
+                  size: 20,
+                  color: (selectedTrainStation != null && selectedTrainStation.stationName == element.stationName)
+                      ? Colors.blueAccent
+                      : Colors.white.withOpacity(0.4),
+                ),
+              ),
+            ],
+          ),
+        ));
+      });
+    }
 
     return SingleChildScrollView(
       child: DefaultTextStyle(style: const TextStyle(fontSize: 10), child: Column(children: list)),
