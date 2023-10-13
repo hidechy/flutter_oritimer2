@@ -10,10 +10,12 @@ environment:
 
 dependencies:
 
+  circular_countdown_timer: ^0.2.3
   cupertino_icons: ^1.0.2
 
   flutter:
     sdk: flutter
+  hooks_riverpod: ^2.4.3
   intl: ^0.18.1
 
 dev_dependencies:

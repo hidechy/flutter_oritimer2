@@ -1,7 +1,6 @@
-// ignore_for_file: must_be_immutable, use_named_constants
+// ignore_for_file: must_be_immutable
 
-import 'dart:async';
-
+import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -10,18 +9,12 @@ import '../extensions/extensions.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  Timer timer = Timer(const Duration(), () {});
-
   late BuildContext _context;
 
   ///
   @override
   Widget build(BuildContext context) {
     _context = context;
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      timer = Timer.periodic(const Duration(seconds: 5), flash);
-    });
 
     final now = DateTime.now();
     final timeFormat = DateFormat('HH:mm:ss');
@@ -36,18 +29,43 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Container(),
                 IconButton(
-                  onPressed: () {
-                    timer.cancel();
-
-                    Navigator.pop(context);
-                  },
+                  onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.close),
                 ),
               ],
             ),
             const SizedBox(height: 20),
-            Text(DateTime.now().yyyymmdd),
-            Text(currentTime),
+            Container(
+              width: context.screenSize.width,
+              height: 70,
+              padding: const EdgeInsets.all(16),
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Row(
+                children: [
+                  CircularCountDownTimer(
+                    duration: 20,
+                    width: context.screenSize.width / 10,
+                    height: context.screenSize.height / 10,
+                    ringColor: Colors.blueAccent,
+                    fillColor: Colors.white,
+                    onComplete: _goHomeScreen,
+                    textStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(width: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(DateTime.now().yyyymmdd),
+                      Text(currentTime),
+                    ],
+                  )
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -55,10 +73,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   ///
-  void flash(Timer timer) => screenReload();
-
-  ///
-  void screenReload() {
+  void _goHomeScreen() {
     Navigator.pushReplacement(
       _context,
       MaterialPageRoute(
