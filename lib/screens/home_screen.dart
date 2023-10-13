@@ -18,7 +18,7 @@ import 'map_screen.dart';
 class HomeScreen extends ConsumerWidget {
   HomeScreen({super.key});
 
-  Utility _utility = Utility();
+  final Utility _utility = Utility();
 
   TrainStation? selectedTrainStation;
 
@@ -67,12 +67,12 @@ class HomeScreen extends ConsumerWidget {
               child: const Text('初期化'),
             ),
             const SizedBox(height: 20),
-            Text('現在地点'),
+            const Text('現在地点'),
             Container(
               width: context.screenSize.width,
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
               decoration: BoxDecoration(color: Colors.blueAccent.withOpacity(0.2)),
-              child: Text('${latLngState.lat} / ${latLngState.lng}', style: TextStyle(fontSize: 10)),
+              child: Text('${latLngState.lat} / ${latLngState.lng}', style: const TextStyle(fontSize: 10)),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
@@ -105,12 +105,12 @@ class HomeScreen extends ConsumerWidget {
                     ),
             ),
             if (distance != '') ...[
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Container(
                 width: context.screenSize.width,
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 decoration: BoxDecoration(color: Colors.redAccent.withOpacity(0.2)),
-                child: Text(distance, style: TextStyle(fontSize: 10)),
+                child: Text(distance, style: const TextStyle(fontSize: 10)),
               ),
             ],
             const SizedBox(height: 30),
