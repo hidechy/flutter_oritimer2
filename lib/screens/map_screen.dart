@@ -9,13 +9,20 @@ import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../extensions/extensions.dart';
+import '../models/train_station.dart';
 import '../state/lat_lng/lat_lng_notifier.dart';
 import '../state/lat_lng/lat_lng_request_state.dart';
+import '../state/train_station/train_station_notifier.dart';
+import '../utility/utility.dart';
 
 class MapScreen extends ConsumerWidget {
   MapScreen({super.key});
 
   List<Marker> markerList = [];
+
+  final Utility _utility = Utility();
+
+  TrainStation? selectedTrainStation;
 
   late BuildContext _context;
   late WidgetRef _ref;
@@ -32,6 +39,19 @@ class MapScreen extends ConsumerWidget {
     getLocation();
 
     final latLngState = ref.watch(latLngProvider);
+
+    selectedTrainStation = ref.watch(trainStationProvider.select((value) => value.selectedTrainStation));
+
+    var distance = '';
+
+    if (selectedTrainStation != null && selectedTrainStation!.lat != '') {
+      distance = _utility.calcDistance(
+        originLat: latLngState.lat,
+        originLng: latLngState.lng,
+        destLat: selectedTrainStation!.lat.toDouble(),
+        destLng: selectedTrainStation!.lng.toDouble(),
+      );
+    }
 
     _makeMarker();
 
@@ -66,18 +86,7 @@ class MapScreen extends ConsumerWidget {
                         minZoom: 3,
                       ),
                       children: [
-                        TileLayer(
-                          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        ),
-                        // PolylineLayer(
-                        //   polylines: [
-                        //     Polyline(
-                        //       points: polyLineList,
-                        //       color: Colors.redAccent.withOpacity(0.6),
-                        //       strokeWidth: 5,
-                        //     ),
-                        //   ],
-                        // ),
+                        TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'),
                         MarkerLayer(markers: markerList),
                       ],
                     )
@@ -105,40 +114,44 @@ class MapScreen extends ConsumerWidget {
                 color: Colors.white.withOpacity(0.4),
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: Row(
-                children: [
-                  CircularCountDownTimer(
-                    duration: 10,
-                    width: context.screenSize.width / 10,
-                    height: context.screenSize.height / 10,
-                    ringColor: Colors.blueAccent,
-                    fillColor: Colors.white,
-                    onComplete: _goHomeScreen,
-                    textStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(width: 20),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(DateTime.now().yyyymmdd),
-                          const SizedBox(width: 10),
-                          Text(currentTime),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(latLngState.lat.toString()),
-                          const Text(' / '),
-                          Text(
-                            latLngState.lng.toString(),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
+              child: DefaultTextStyle(
+                style: const TextStyle(fontSize: 10),
+                child: Row(
+                  children: [
+                    CircularCountDownTimer(
+                      duration: 10,
+                      width: context.screenSize.width / 10,
+                      height: context.screenSize.height / 10,
+                      ringColor: Colors.blueAccent,
+                      fillColor: Colors.white,
+                      onComplete: _goHomeScreen,
+                      textStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(width: 20),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(DateTime.now().yyyymmdd),
+                            const SizedBox(width: 10),
+                            Text(currentTime),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(latLngState.lat.toString()),
+                            const Text(' / '),
+                            Text(
+                              latLngState.lng.toString(),
+                            )
+                          ],
+                        ),
+                        Text('$distance Km'),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
 

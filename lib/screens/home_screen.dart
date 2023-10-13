@@ -110,7 +110,7 @@ class HomeScreen extends ConsumerWidget {
                 width: context.screenSize.width,
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 decoration: BoxDecoration(color: Colors.redAccent.withOpacity(0.2)),
-                child: Text(distance, style: const TextStyle(fontSize: 10)),
+                child: Text('$distance Km', style: const TextStyle(fontSize: 10)),
               ),
             ],
             const SizedBox(height: 30),
