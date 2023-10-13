@@ -39,9 +39,11 @@ class TrainCompanyNotifier extends StateNotifier<TrainCompanyResponseState> {
       }
 
       state = state.copyWith(trainCompanyList: list, companyTrainMap: map);
-    }).catchError((error, _) {
-      utility.showError('予期せぬエラーが発生しました');
     });
+
+    // .catchError((error, _) {
+    //   utility.showError('予期せぬエラーが発生しました');
+    // });
   }
 }
 
