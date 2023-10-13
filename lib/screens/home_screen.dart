@@ -1,14 +1,13 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:konoeki_de_oritimer/state/app_state/app_notifier.dart';
-import 'package:konoeki_de_oritimer/state/lat_lng/lat_lng_notifier.dart';
-import 'package:konoeki_de_oritimer/state/lat_lng/lat_lng_request_state.dart';
 
 import '../extensions/extensions.dart';
 import '../models/train_station.dart';
-import '../state/train_company/train_company_notifier.dart';
+import '../state/app_state/app_notifier.dart';
+import '../state/lat_lng/lat_lng_notifier.dart';
+import '../state/lat_lng/lat_lng_request_state.dart';
 import '../state/train_station/train_station_notifier.dart';
 import 'alert/_oritimer_dialog.dart';
 import 'alert/train_select_alert.dart';
@@ -24,7 +23,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     selectedTrainStation = ref.watch(trainStationProvider.select((value) => value.selectedTrainStation));
 
-    var appState = ref.watch(appProvider);
+    final appState = ref.watch(appProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -33,7 +32,7 @@ class HomeScreen extends ConsumerWidget {
           children: [
             ElevatedButton(
               onPressed: () async {
-                await ref.read(latLngProvider.notifier).setLatLng(param: LatLngRequestState(lat: 0, lng: 0));
+                await ref.read(latLngProvider.notifier).setLatLng(param: const LatLngRequestState());
                 //
                 // await ref.read(trainCompanyProvider.notifier).setSelectedCompanyName(selectedCompanyName: '');
                 // await ref.read(trainCompanyProvider.notifier).setSelectedTrainNumber(selectedTrainNumber: '');
@@ -43,11 +42,11 @@ class HomeScreen extends ConsumerWidget {
                           id: 0, stationName: '', address: '', lat: '', lng: '', lineNumber: '', lineName: ''),
                     );
 
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                await Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
               },
-              child: Text('初期化'),
+              child: const Text('初期化'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
                 await ref.watch(appProvider.notifier).setErrorMsg(msg: '');
@@ -94,7 +93,7 @@ class HomeScreen extends ConsumerWidget {
             if (appState.errorMsg != '')
               Text(
                 appState.errorMsg,
-                style: TextStyle(color: Colors.yellowAccent, fontSize: 10),
+                style: const TextStyle(color: Colors.yellowAccent, fontSize: 10),
               ),
           ],
         ),
