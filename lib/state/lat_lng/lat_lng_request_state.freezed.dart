@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$LatLngRequestState {
   double get lat => throw _privateConstructorUsedError;
   double get lng => throw _privateConstructorUsedError;
+  double get stationLat => throw _privateConstructorUsedError;
+  double get stationLng => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $LatLngRequestStateCopyWith<LatLngRequestState> get copyWith =>
@@ -30,7 +32,7 @@ abstract class $LatLngRequestStateCopyWith<$Res> {
           LatLngRequestState value, $Res Function(LatLngRequestState) then) =
       _$LatLngRequestStateCopyWithImpl<$Res, LatLngRequestState>;
   @useResult
-  $Res call({double lat, double lng});
+  $Res call({double lat, double lng, double stationLat, double stationLng});
 }
 
 /// @nodoc
@@ -48,6 +50,8 @@ class _$LatLngRequestStateCopyWithImpl<$Res, $Val extends LatLngRequestState>
   $Res call({
     Object? lat = null,
     Object? lng = null,
+    Object? stationLat = null,
+    Object? stationLng = null,
   }) {
     return _then(_value.copyWith(
       lat: null == lat
@@ -57,6 +61,14 @@ class _$LatLngRequestStateCopyWithImpl<$Res, $Val extends LatLngRequestState>
       lng: null == lng
           ? _value.lng
           : lng // ignore: cast_nullable_to_non_nullable
+              as double,
+      stationLat: null == stationLat
+          ? _value.stationLat
+          : stationLat // ignore: cast_nullable_to_non_nullable
+              as double,
+      stationLng: null == stationLng
+          ? _value.stationLng
+          : stationLng // ignore: cast_nullable_to_non_nullable
               as double,
     ) as $Val);
   }
@@ -70,7 +82,7 @@ abstract class _$$LatLngRequestStateImplCopyWith<$Res>
       __$$LatLngRequestStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({double lat, double lng});
+  $Res call({double lat, double lng, double stationLat, double stationLng});
 }
 
 /// @nodoc
@@ -86,6 +98,8 @@ class __$$LatLngRequestStateImplCopyWithImpl<$Res>
   $Res call({
     Object? lat = null,
     Object? lng = null,
+    Object? stationLat = null,
+    Object? stationLng = null,
   }) {
     return _then(_$LatLngRequestStateImpl(
       lat: null == lat
@@ -96,6 +110,14 @@ class __$$LatLngRequestStateImplCopyWithImpl<$Res>
           ? _value.lng
           : lng // ignore: cast_nullable_to_non_nullable
               as double,
+      stationLat: null == stationLat
+          ? _value.stationLat
+          : stationLat // ignore: cast_nullable_to_non_nullable
+              as double,
+      stationLng: null == stationLng
+          ? _value.stationLng
+          : stationLng // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -103,7 +125,11 @@ class __$$LatLngRequestStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$LatLngRequestStateImpl implements _LatLngRequestState {
-  const _$LatLngRequestStateImpl({this.lat = 0.0, this.lng = 0.0});
+  const _$LatLngRequestStateImpl(
+      {this.lat = 0.0,
+      this.lng = 0.0,
+      this.stationLat = 0.0,
+      this.stationLng = 0.0});
 
   @override
   @JsonKey()
@@ -111,10 +137,16 @@ class _$LatLngRequestStateImpl implements _LatLngRequestState {
   @override
   @JsonKey()
   final double lng;
+  @override
+  @JsonKey()
+  final double stationLat;
+  @override
+  @JsonKey()
+  final double stationLng;
 
   @override
   String toString() {
-    return 'LatLngRequestState(lat: $lat, lng: $lng)';
+    return 'LatLngRequestState(lat: $lat, lng: $lng, stationLat: $stationLat, stationLng: $stationLng)';
   }
 
   @override
@@ -123,11 +155,16 @@ class _$LatLngRequestStateImpl implements _LatLngRequestState {
         (other.runtimeType == runtimeType &&
             other is _$LatLngRequestStateImpl &&
             (identical(other.lat, lat) || other.lat == lat) &&
-            (identical(other.lng, lng) || other.lng == lng));
+            (identical(other.lng, lng) || other.lng == lng) &&
+            (identical(other.stationLat, stationLat) ||
+                other.stationLat == stationLat) &&
+            (identical(other.stationLng, stationLng) ||
+                other.stationLng == stationLng));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, lat, lng);
+  int get hashCode =>
+      Object.hash(runtimeType, lat, lng, stationLat, stationLng);
 
   @JsonKey(ignore: true)
   @override
@@ -138,13 +175,20 @@ class _$LatLngRequestStateImpl implements _LatLngRequestState {
 }
 
 abstract class _LatLngRequestState implements LatLngRequestState {
-  const factory _LatLngRequestState({final double lat, final double lng}) =
-      _$LatLngRequestStateImpl;
+  const factory _LatLngRequestState(
+      {final double lat,
+      final double lng,
+      final double stationLat,
+      final double stationLng}) = _$LatLngRequestStateImpl;
 
   @override
   double get lat;
   @override
   double get lng;
+  @override
+  double get stationLat;
+  @override
+  double get stationLng;
   @override
   @JsonKey(ignore: true)
   _$$LatLngRequestStateImplCopyWith<_$LatLngRequestStateImpl> get copyWith =>

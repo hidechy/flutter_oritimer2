@@ -12,9 +12,12 @@ class LatLngNotifier extends StateNotifier<LatLngResponseState> {
   LatLngNotifier(super.state);
 
   ///
-  Future<void> setLatLng({required LatLngRequestState param}) async {
-    state = state.copyWith(lat: param.lat, lng: param.lng);
-  }
+  Future<void> setLatLng({required LatLngRequestState param}) async =>
+      state = state.copyWith(lat: param.lat, lng: param.lng);
+
+  ///
+  Future<void> setStationLatLng({required LatLngRequestState param}) async =>
+      state = state.copyWith(stationLat: param.stationLat, stationLng: param.stationLng);
 }
 
 ////////////////////////////////////////////////
