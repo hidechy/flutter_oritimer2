@@ -28,8 +28,7 @@ class MapScreen extends ConsumerWidget {
   late WidgetRef _ref;
 
   ///
-  void _goHomeScreen() => Navigator.pushReplacement(
-      _context, MaterialPageRoute(builder: (context) => MapScreen()));
+  void _goHomeScreen() => Navigator.pushReplacement(_context, MaterialPageRoute(builder: (context) => MapScreen()));
 
   ///
   @override
@@ -41,8 +40,7 @@ class MapScreen extends ConsumerWidget {
 
     final latLngState = ref.watch(latLngProvider);
 
-    selectedTrainStation = ref.watch(
-        trainStationProvider.select((value) => value.selectedTrainStation));
+    selectedTrainStation = ref.watch(trainStationProvider.select((value) => value.selectedTrainStation));
 
     var distance = '';
 
@@ -98,8 +96,7 @@ class MapScreen extends ConsumerWidget {
               ringColor: Colors.blueAccent,
               fillColor: Colors.white,
               onComplete: _goHomeScreen,
-              textStyle: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold),
+              textStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -262,14 +259,12 @@ class MapScreen extends ConsumerWidget {
       }
     }
 
-    final position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+    final position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
     // debugPrint('緯度: ${position.latitude}');
     // debugPrint('経度: ${position.longitude}');
 
-    final param =
-        LatLngRequestState(lat: position.latitude, lng: position.longitude);
+    final param = LatLngRequestState(lat: position.latitude, lng: position.longitude);
 
     await _ref.read(latLngProvider.notifier).setLatLng(param: param);
 
@@ -319,8 +314,7 @@ class MapScreen extends ConsumerWidget {
           backgroundColor: Colors.orangeAccent.withOpacity(0.4),
           child: const Text(
             'Here',
-            style: TextStyle(
-                color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
           ),
         ),
       ),

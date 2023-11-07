@@ -132,6 +132,7 @@ class TrainSelectAlert extends ConsumerWidget {
 
     final companyTrainMap = _ref.watch(trainCompanyProvider.select((value) => value.companyTrainMap));
 
+    var i = 0;
     companyTrainMap[selectedCompanyName]?.forEach((element) {
       list.add(
         Container(
@@ -141,7 +142,7 @@ class TrainSelectAlert extends ConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(element.trainName),
+              Text(i.toString() + ' : ' + element.trainName),
               GestureDetector(
                 onTap: () async {
                   await _ref
@@ -160,6 +161,8 @@ class TrainSelectAlert extends ConsumerWidget {
           ),
         ),
       );
+
+      i++;
     });
 
     return SingleChildScrollView(
