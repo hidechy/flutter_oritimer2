@@ -12,6 +12,7 @@ import '../extensions/extensions.dart';
 import '../models/train_station.dart';
 import '../state/lat_lng/lat_lng_notifier.dart';
 import '../state/lat_lng/lat_lng_request_state.dart';
+import '../state/train_station/train_station_notifier.dart';
 import '../utility/utility.dart';
 
 class MapScreen extends ConsumerWidget {
@@ -36,6 +37,24 @@ class MapScreen extends ConsumerWidget {
     _context = context;
     _ref = ref;
 
+    getLocation();
+
+    final latLngState = ref.watch(latLngProvider);
+
+    selectedTrainStation = ref.watch(
+        trainStationProvider.select((value) => value.selectedTrainStation));
+
+    var distance = '';
+
+    if (selectedTrainStation != null && selectedTrainStation!.lat != '') {
+      distance = _utility.calcDistance(
+        originLat: latLngState.lat,
+        originLng: latLngState.lng,
+        destLat: selectedTrainStation!.lat.toDouble(),
+        destLng: selectedTrainStation!.lng.toDouble(),
+      );
+    }
+
     final now = DateTime.now();
     final timeFormat = DateFormat('HH:mm:ss');
     final currentTime = timeFormat.format(now);
@@ -56,6 +75,22 @@ class MapScreen extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 10),
+            Text(latLngState.lat.toString()),
+            Text(latLngState.lng.toString()),
+            const SizedBox(height: 40),
+            if (selectedTrainStation != null) ...[
+              Text(selectedTrainStation!.stationName),
+              Text(selectedTrainStation!.address),
+              Text(selectedTrainStation!.lat),
+              Text(selectedTrainStation!.lng),
+              Text(selectedTrainStation!.lineNumber),
+              Text(selectedTrainStation!.lineName),
+            ],
+            const SizedBox(height: 10),
+            Text(distance),
+            const SizedBox(height: 10),
+            Text(currentTime),
+            const SizedBox(height: 40),
             CircularCountDownTimer(
               duration: 10,
               width: context.screenSize.width / 10,

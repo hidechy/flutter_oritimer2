@@ -11,6 +11,12 @@
         android:label="konoeki_de_oritimer"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <!-- added api key -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBKNjXsGi5xIkhmgsQTiIT8Ou8p9k45KsA" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
