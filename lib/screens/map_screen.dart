@@ -12,7 +12,6 @@ import '../extensions/extensions.dart';
 import '../models/train_station.dart';
 import '../state/lat_lng/lat_lng_notifier.dart';
 import '../state/lat_lng/lat_lng_request_state.dart';
-import '../state/train_station/train_station_notifier.dart';
 import '../utility/utility.dart';
 
 class MapScreen extends ConsumerWidget {
@@ -28,11 +27,59 @@ class MapScreen extends ConsumerWidget {
   late WidgetRef _ref;
 
   ///
-  void _goHomeScreen() => Navigator.pushReplacement(_context, MaterialPageRoute(builder: (context) => MapScreen()));
+  void _goHomeScreen() => Navigator.pushReplacement(
+      _context, MaterialPageRoute(builder: (context) => MapScreen()));
 
   ///
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    _context = context;
+    _ref = ref;
+
+    final now = DateTime.now();
+    final timeFormat = DateFormat('HH:mm:ss');
+    final currentTime = timeFormat.format(now);
+
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            Text('MapScreen'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(),
+                IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.close),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            CircularCountDownTimer(
+              duration: 10,
+              width: context.screenSize.width / 10,
+              height: context.screenSize.height / 10,
+              ringColor: Colors.blueAccent,
+              fillColor: Colors.white,
+              onComplete: _goHomeScreen,
+              textStyle: const TextStyle(
+                  color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    /*
+
+
+
+
+
+
+
+
     _context = context;
     _ref = ref;
 
@@ -160,6 +207,12 @@ class MapScreen extends ConsumerWidget {
         ),
       ),
     );
+
+
+
+
+
+    */
   }
 
   ///
@@ -174,12 +227,14 @@ class MapScreen extends ConsumerWidget {
       }
     }
 
-    final position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    final position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
 
     // debugPrint('緯度: ${position.latitude}');
     // debugPrint('経度: ${position.longitude}');
 
-    final param = LatLngRequestState(lat: position.latitude, lng: position.longitude);
+    final param =
+        LatLngRequestState(lat: position.latitude, lng: position.longitude);
 
     await _ref.read(latLngProvider.notifier).setLatLng(param: param);
 
@@ -229,7 +284,8 @@ class MapScreen extends ConsumerWidget {
           backgroundColor: Colors.orangeAccent.withOpacity(0.4),
           child: const Text(
             'Here',
-            style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
           ),
         ),
       ),
