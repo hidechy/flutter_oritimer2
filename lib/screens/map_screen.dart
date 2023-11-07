@@ -1,12 +1,14 @@
 // ignore_for_file: must_be_immutable, depend_on_referenced_packages, deprecated_member_use
 
+import 'dart:async';
+
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
+//import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:latlong2/latlong.dart';
 
 import '../extensions/extensions.dart';
 import '../models/train_station.dart';
@@ -23,6 +25,10 @@ class MapScreen extends ConsumerWidget {
   final Utility _utility = Utility();
 
   TrainStation? selectedTrainStation;
+
+  late CameraPosition initialCameraPosition;
+
+  final Completer<GoogleMapController> mapController = Completer<GoogleMapController>();
 
   late BuildContext _context;
   late WidgetRef _ref;
@@ -53,50 +59,76 @@ class MapScreen extends ConsumerWidget {
       );
     }
 
+    setMapParam();
+
     final now = DateTime.now();
     final timeFormat = DateFormat('HH:mm:ss');
     final currentTime = timeFormat.format(now);
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            Text('MapScreen'),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(),
-                IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close),
-                ),
-              ],
+            //=======================================
+            Expanded(
+              child: GoogleMap(
+                onMapCreated: mapController.complete,
+                initialCameraPosition: initialCameraPosition,
+                // markers: markers,
+                // polylines: polylineSet,
+                zoomControlsEnabled: false,
+              ),
             ),
-            const SizedBox(height: 10),
-            Text(latLngState.lat.toString()),
-            Text(latLngState.lng.toString()),
-            const SizedBox(height: 40),
-            if (selectedTrainStation != null) ...[
-              Text(selectedTrainStation!.stationName),
-              Text(selectedTrainStation!.address),
-              Text(selectedTrainStation!.lat),
-              Text(selectedTrainStation!.lng),
-              Text(selectedTrainStation!.lineNumber),
-              Text(selectedTrainStation!.lineName),
-            ],
-            const SizedBox(height: 10),
-            Text(distance),
-            const SizedBox(height: 10),
-            Text(currentTime),
-            const SizedBox(height: 40),
-            CircularCountDownTimer(
-              duration: 10,
-              width: context.screenSize.width / 10,
-              height: context.screenSize.height / 10,
-              ringColor: Colors.blueAccent,
-              fillColor: Colors.white,
-              onComplete: _goHomeScreen,
-              textStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            //=======================================
+
+            Container(
+              width: context.screenSize.width,
+              decoration: BoxDecoration(color: Colors.black.withOpacity(0.4)),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('MapScreen'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(),
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(
+                          Icons.close,
+                          color: Colors.redAccent,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Text(latLngState.lat.toString()),
+                  Text(latLngState.lng.toString()),
+                  const SizedBox(height: 40),
+                  if (selectedTrainStation != null) ...[
+                    Text(selectedTrainStation!.stationName),
+                    Text(selectedTrainStation!.address),
+                    Text(selectedTrainStation!.lat),
+                    Text(selectedTrainStation!.lng),
+                    Text(selectedTrainStation!.lineNumber),
+                    Text(selectedTrainStation!.lineName),
+                  ],
+                  const SizedBox(height: 10),
+                  Text(distance),
+                  const SizedBox(height: 10),
+                  Text(currentTime),
+                  const SizedBox(height: 40),
+                  CircularCountDownTimer(
+                    duration: 10,
+                    width: context.screenSize.width / 10,
+                    height: context.screenSize.height / 10,
+                    ringColor: Colors.blueAccent,
+                    fillColor: Colors.white,
+                    onComplete: _goHomeScreen,
+                    textStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -301,23 +333,40 @@ class MapScreen extends ConsumerWidget {
     */
   }
 
+  // ///
+  // Future<void> _makeMarker() async {
+  //   markerList = [];
+  //
+  //   final latLngState = _ref.watch(latLngProvider);
+  //
+  //   markerList.add(
+  //     Marker(
+  //       point: LatLng(latLngState.lat, latLngState.lng),
+  //       child: CircleAvatar(
+  //         backgroundColor: Colors.orangeAccent.withOpacity(0.4),
+  //         child: const Text(
+  //           'Here',
+  //           style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+  //
+  //
+
   ///
-  Future<void> _makeMarker() async {
-    markerList = [];
+  void setMapParam() {
+    // final pinpointMapZoom = _ref.watch(mapPinpointProvider.select((value) => value.pinpointMapZoom));
+    //
+    // final latLng = LatLng(geolocList[0].latitude.toDouble(), geolocList[0].longitude.toDouble());
+    // initialCameraPosition = CameraPosition(target: latLng, zoom: pinpointMapZoom.toDouble(), tilt: 50);
+    //
+    //
+    //
 
     final latLngState = _ref.watch(latLngProvider);
-
-    markerList.add(
-      Marker(
-        point: LatLng(latLngState.lat, latLngState.lng),
-        child: CircleAvatar(
-          backgroundColor: Colors.orangeAccent.withOpacity(0.4),
-          child: const Text(
-            'Here',
-            style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
-          ),
-        ),
-      ),
-    );
+    final latLng = LatLng(latLngState.lat, latLngState.lng);
+    initialCameraPosition = CameraPosition(target: latLng, zoom: 15, tilt: 50);
   }
 }
