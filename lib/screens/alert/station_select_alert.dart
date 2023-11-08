@@ -5,12 +5,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../extensions/extensions.dart';
 import '../../models/train_company.dart';
+import '../../state/app_state/app_notifier.dart';
+import '../../state/lat_lng/lat_lng_notifier.dart';
 import '../../state/train_station/train_station_notifier.dart';
+import '../../utility/utility.dart';
 
 class StationSelectAlert extends ConsumerWidget {
   StationSelectAlert({super.key, required this.train});
 
   final Train train;
+
+  final Utility _utility = Utility();
 
   late BuildContext _context;
   late WidgetRef _ref;
@@ -52,6 +57,8 @@ class StationSelectAlert extends ConsumerWidget {
     final list = <Widget>[];
 
     if (train.trainNumber != '') {
+      final latLngState = _ref.watch(latLngProvider);
+
       final selectedTrainStation = _ref.watch(trainStationProvider.select((value) => value.selectedTrainStation));
 
       _ref.watch(trainStationProvider.select((value) => value.stationList)).forEach((element) {
@@ -73,6 +80,15 @@ class StationSelectAlert extends ConsumerWidget {
               GestureDetector(
                 onTap: () async {
                   await _ref.read(trainStationProvider.notifier).setSelectedTrainStation(station: element);
+
+                  final distance = _utility.calcDistance(
+                    originLat: latLngState.lat,
+                    originLng: latLngState.lng,
+                    destLat: element.lat.toDouble(),
+                    destLng: element.lng.toDouble(),
+                  );
+
+                  await _ref.read(appProvider.notifier).setDistance(distance: distance);
 
                   Navigator.pop(_context);
 

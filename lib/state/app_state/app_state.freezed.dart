@@ -16,7 +16,11 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AppState {
+  ///
   String get errorMsg => throw _privateConstructorUsedError;
+
+  ///
+  String get distance => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AppStateCopyWith<AppState> get copyWith =>
@@ -28,7 +32,7 @@ abstract class $AppStateCopyWith<$Res> {
   factory $AppStateCopyWith(AppState value, $Res Function(AppState) then) =
       _$AppStateCopyWithImpl<$Res, AppState>;
   @useResult
-  $Res call({String errorMsg});
+  $Res call({String errorMsg, String distance});
 }
 
 /// @nodoc
@@ -45,11 +49,16 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
   @override
   $Res call({
     Object? errorMsg = null,
+    Object? distance = null,
   }) {
     return _then(_value.copyWith(
       errorMsg: null == errorMsg
           ? _value.errorMsg
           : errorMsg // ignore: cast_nullable_to_non_nullable
+              as String,
+      distance: null == distance
+          ? _value.distance
+          : distance // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -63,7 +72,7 @@ abstract class _$$AppStateImplCopyWith<$Res>
       __$$AppStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String errorMsg});
+  $Res call({String errorMsg, String distance});
 }
 
 /// @nodoc
@@ -78,11 +87,16 @@ class __$$AppStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? errorMsg = null,
+    Object? distance = null,
   }) {
     return _then(_$AppStateImpl(
       errorMsg: null == errorMsg
           ? _value.errorMsg
           : errorMsg // ignore: cast_nullable_to_non_nullable
+              as String,
+      distance: null == distance
+          ? _value.distance
+          : distance // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -91,15 +105,21 @@ class __$$AppStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$AppStateImpl implements _AppState {
-  const _$AppStateImpl({this.errorMsg = ''});
+  const _$AppStateImpl({this.errorMsg = '', this.distance = ''});
 
+  ///
   @override
   @JsonKey()
   final String errorMsg;
 
+  ///
+  @override
+  @JsonKey()
+  final String distance;
+
   @override
   String toString() {
-    return 'AppState(errorMsg: $errorMsg)';
+    return 'AppState(errorMsg: $errorMsg, distance: $distance)';
   }
 
   @override
@@ -108,11 +128,13 @@ class _$AppStateImpl implements _AppState {
         (other.runtimeType == runtimeType &&
             other is _$AppStateImpl &&
             (identical(other.errorMsg, errorMsg) ||
-                other.errorMsg == errorMsg));
+                other.errorMsg == errorMsg) &&
+            (identical(other.distance, distance) ||
+                other.distance == distance));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorMsg);
+  int get hashCode => Object.hash(runtimeType, errorMsg, distance);
 
   @JsonKey(ignore: true)
   @override
@@ -122,10 +144,17 @@ class _$AppStateImpl implements _AppState {
 }
 
 abstract class _AppState implements AppState {
-  const factory _AppState({final String errorMsg}) = _$AppStateImpl;
+  const factory _AppState({final String errorMsg, final String distance}) =
+      _$AppStateImpl;
 
   @override
+
+  ///
   String get errorMsg;
+  @override
+
+  ///
+  String get distance;
   @override
   @JsonKey(ignore: true)
   _$$AppStateImplCopyWith<_$AppStateImpl> get copyWith =>

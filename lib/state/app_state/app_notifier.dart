@@ -12,6 +12,9 @@ class AppNotifier extends StateNotifier<AppState> {
 
   ///
   Future<void> setErrorMsg({required String msg}) async => state = state.copyWith(errorMsg: msg);
+
+  ///
+  Future<void> setDistance({required String distance}) async => state = state.copyWith(distance: distance);
 }
 
 ////////////////////////////////////////////////
