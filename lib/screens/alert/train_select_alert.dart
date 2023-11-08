@@ -142,7 +142,7 @@ class TrainSelectAlert extends ConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(i.toString() + ' : ' + element.trainName),
+              Text('$i : ${element.trainName}'),
               GestureDetector(
                 onTap: () async {
                   await _ref

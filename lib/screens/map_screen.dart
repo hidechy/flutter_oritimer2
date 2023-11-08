@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable, depend_on_referenced_packages, deprecated_member_use
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,9 @@ class MapScreen extends ConsumerWidget {
 
   late CameraPosition initialCameraPosition;
 
-  final Completer<GoogleMapController> mapController = Completer<GoogleMapController>();
+  Completer<GoogleMapController> mapController = Completer<GoogleMapController>();
+
+  LatLngBounds pinpointMapBounds = LatLngBounds(southwest: const LatLng(0, 0), northeast: const LatLng(0, 0));
 
   late BuildContext _context;
   late WidgetRef _ref;
@@ -61,6 +64,8 @@ class MapScreen extends ConsumerWidget {
 
     setMapParam();
 
+    makeBounds();
+
     final now = DateTime.now();
     final timeFormat = DateFormat('HH:mm:ss');
     final currentTime = timeFormat.format(now);
@@ -70,14 +75,12 @@ class MapScreen extends ConsumerWidget {
         child: Stack(
           children: [
             //=======================================
-            Expanded(
-              child: GoogleMap(
-                onMapCreated: mapController.complete,
-                initialCameraPosition: initialCameraPosition,
-                // markers: markers,
-                // polylines: polylineSet,
-                zoomControlsEnabled: false,
-              ),
+            GoogleMap(
+              onMapCreated: _onMapCreated,
+              initialCameraPosition: initialCameraPosition,
+              // markers: markers,
+              // polylines: polylineSet,
+              zoomControlsEnabled: false,
             ),
             //=======================================
 
@@ -87,7 +90,7 @@ class MapScreen extends ConsumerWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('MapScreen'),
+                  const Text('MapScreen'),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -134,149 +137,46 @@ class MapScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
 
-    /*
+  ///
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = Completer();
 
+    makeBounds();
+  }
 
+  ///
+  Future<void> makeBounds() async {
+    final latList = <double>[];
+    final lngList = <double>[];
 
+    final latLngState = _ref.watch(latLngProvider);
 
+    latList.add(latLngState.lat);
+    lngList.add(latLngState.lng);
 
+    selectedTrainStation = await _ref.watch(trainStationProvider.select((value) => value.selectedTrainStation));
 
-
-
-    _context = context;
-    _ref = ref;
-
-    getLocation();
-
-    final latLngState = ref.watch(latLngProvider);
-
-    selectedTrainStation = ref.watch(trainStationProvider.select((value) => value.selectedTrainStation));
-
-    var distance = '';
-
-    if (selectedTrainStation != null && selectedTrainStation!.lat != '') {
-      distance = _utility.calcDistance(
-        originLat: latLngState.lat,
-        originLng: latLngState.lng,
-        destLat: selectedTrainStation!.lat.toDouble(),
-        destLng: selectedTrainStation!.lng.toDouble(),
-      );
+    if (selectedTrainStation != null) {
+      latList.add(selectedTrainStation!.lat.toDouble());
+      lngList.add(selectedTrainStation!.lng.toDouble());
     }
 
-    _makeMarker();
+    final minLat = latList.reduce(min);
+    final maxLat = latList.reduce(max);
+    final minLng = lngList.reduce(min);
+    final maxLng = lngList.reduce(max);
 
-    final now = DateTime.now();
-    final timeFormat = DateFormat('HH:mm:ss');
-    final currentTime = timeFormat.format(now);
+    pinpointMapBounds = LatLngBounds(northeast: LatLng(maxLat, maxLng), southwest: LatLng(minLat, minLng));
 
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(),
-                IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
+    await _displayPinpointMapBounds();
+  }
 
-            //---------------------------------------------
-            Expanded(
-              child: (latLngState.lat > 0 && latLngState.lng > 0)
-                  ? FlutterMap(
-                      options: MapOptions(
-                        center: LatLng(latLngState.lat, latLngState.lng),
-                        zoom: 16,
-                        maxZoom: 17,
-                        minZoom: 3,
-                      ),
-                      children: [
-                        TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'),
-                        MarkerLayer(markers: markerList),
-                      ],
-                    )
-                  : Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: const Row(
-                        children: [
-                          CircularProgressIndicator(),
-                          SizedBox(width: 20),
-                          Text('Now Map Calling..'),
-                        ],
-                      ),
-                    ),
-            ),
-            //---------------------------------------------
-
-            const SizedBox(height: 20),
-
-            Container(
-              width: context.screenSize.width,
-              height: 70,
-              padding: const EdgeInsets.all(16),
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.4),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: DefaultTextStyle(
-                style: const TextStyle(fontSize: 10),
-                child: Row(
-                  children: [
-                    CircularCountDownTimer(
-                      duration: 10,
-                      width: context.screenSize.width / 10,
-                      height: context.screenSize.height / 10,
-                      ringColor: Colors.blueAccent,
-                      fillColor: Colors.white,
-                      onComplete: _goHomeScreen,
-                      textStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(width: 20),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(DateTime.now().yyyymmdd),
-                            const SizedBox(width: 10),
-                            Text(currentTime),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text(latLngState.lat.toString()),
-                            const Text(' / '),
-                            Text(
-                              latLngState.lng.toString(),
-                            )
-                          ],
-                        ),
-                        Text('$distance Km'),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 10),
-          ],
-        ),
-      ),
-    );
-
-
-
-
-
-    */
+  ///
+  Future<void> _displayPinpointMapBounds() async {
+    final googleMap = await mapController.future;
+    await googleMap.animateCamera(CameraUpdate.newLatLngBounds(pinpointMapBounds, 50));
   }
 
   ///
