@@ -110,11 +110,16 @@ class MapScreen extends ConsumerWidget {
               circles: {
                 if (circleCenter['lat'] != null)
                   Circle(
-                    circleId: const CircleId('Circle1'), //一意なID
-                    center: LatLng(circleCenter['lat']!, circleCenter['lng']!), //中心の座標
-                    radius: 300, //半径(m)
-                    strokeColor: Colors.pink.withOpacity(0.8), //線の色
-                    fillColor: Colors.pink.withOpacity(0.2), //塗りつぶし色
+                    circleId: const CircleId('Circle1'),
+                    //一意なID
+                    center: LatLng(circleCenter['lat']!, circleCenter['lng']!),
+                    //中心の座標
+                    radius: 300,
+                    //半径(m)
+                    strokeColor: Colors.pink.withOpacity(0.8),
+                    //線の色
+                    fillColor: Colors.pink.withOpacity(0.2),
+                    //塗りつぶし色
                     strokeWidth: 2, //線の太さ
                   )
               },
@@ -140,7 +145,9 @@ class MapScreen extends ConsumerWidget {
                   width: context.screenSize.width,
                   decoration: BoxDecoration(color: Colors.black.withOpacity(0.3)),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const SizedBox(width: 20),
                       CircularCountDownTimer(
                         duration: 10,
                         width: context.screenSize.width / 10,
@@ -153,6 +160,7 @@ class MapScreen extends ConsumerWidget {
                       const SizedBox(width: 20),
                       Expanded(
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const SizedBox(height: 10),
@@ -168,18 +176,32 @@ class MapScreen extends ConsumerWidget {
                                 ],
                               ),
                             ),
-                            const SizedBox(height: 40),
                             if (selectedTrainStation != null) ...[
-//                    Text(selectedTrainStation.lineNumber),
-                              Text(selectedTrainStation.lineName),
-                              Text(selectedTrainStation.stationName),
-
-                              // Text(selectedTrainStation.address),
-                              // Text(selectedTrainStation.lat),
-                              // Text(selectedTrainStation.lng),
+                              const SizedBox(height: 10),
+                              const Text('目的地'),
+                              Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(color: Colors.black.withOpacity(0.4)),
+                                padding: const EdgeInsets.symmetric(vertical: 5),
+                                child: Column(
+                                  children: [
+                                    Text(selectedTrainStation.stationName),
+                                    Text(selectedTrainStation.lineName),
+                                  ],
+                                ),
+                              ),
                             ],
                             const SizedBox(height: 10),
-                            Text(distance),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(),
+                                Text(
+                                  '$distance Km',
+                                  style: const TextStyle(fontSize: 20, color: Colors.yellowAccent),
+                                ),
+                              ],
+                            ),
                             const SizedBox(height: 10),
                           ],
                         ),
