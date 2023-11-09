@@ -65,6 +65,8 @@ class MapScreen extends ConsumerWidget {
       ),
     };
 
+    final circleCenter = <String, double>{};
+
     if (selectedTrainStation != null) {
       markers.add(
         Marker(
@@ -90,6 +92,9 @@ class MapScreen extends ConsumerWidget {
       );
 
       //////////////////////////////////
+
+      circleCenter['lat'] = selectedTrainStation.lat.toDouble();
+      circleCenter['lng'] = selectedTrainStation.lng.toDouble();
     }
 
     //==============================
@@ -105,6 +110,17 @@ class MapScreen extends ConsumerWidget {
               onMapCreated: (GoogleMapController gmcontroller) {
                 _mapController.complete(gmcontroller);
                 _fitMapBounds();
+              },
+              circles: {
+                if (circleCenter['lat'] != null)
+                  Circle(
+                    circleId: const CircleId('Circle1'), //一意なID
+                    center: LatLng(circleCenter['lat']!, circleCenter['lng']!), //中心の座標
+                    radius: 300, //半径(m)
+                    strokeColor: Colors.pink.withOpacity(0.8), //線の色
+                    fillColor: Colors.pink.withOpacity(0.2), //塗りつぶし色
+                    strokeWidth: 2, //線の太さ
+                  )
               },
             ),
             Column(
