@@ -22,7 +22,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     _ref = ref;
 
-    getLocation();
+    _getLocation();
 
     final latLngState = ref.watch(latLngProvider);
 
@@ -77,12 +77,7 @@ class HomeScreen extends ConsumerWidget {
             if (appState.distance != '') ...[
               const SizedBox(height: 30),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MapScreen(trainStation: selectedTrainStation!)),
-                  );
-                },
+                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => MapScreen())),
                 child: const Text('map'),
               ),
             ],
@@ -93,7 +88,7 @@ class HomeScreen extends ConsumerWidget {
   }
 
   ///
-  Future<void> getLocation() async {
+  Future<void> _getLocation() async {
     var permission = await Geolocator.checkPermission();
 
     if (permission == LocationPermission.denied) {

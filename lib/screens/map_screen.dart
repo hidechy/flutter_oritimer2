@@ -1,10 +1,13 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../extensions/extensions.dart';
-import '../models/train_station.dart';
 import '../state/app_state/app_notifier.dart';
 import '../state/lat_lng/lat_lng_notifier.dart';
 import '../state/lat_lng/lat_lng_request_state.dart';
@@ -13,20 +16,30 @@ import '../utility/utility.dart';
 
 // ignore: must_be_immutable
 class MapScreen extends ConsumerWidget {
-  MapScreen({super.key, required this.trainStation});
-
-  final TrainStation trainStation;
+  MapScreen({super.key});
 
   final Utility _utility = Utility();
 
+  final Completer<GoogleMapController> _mapController = Completer<GoogleMapController>();
+
+  late CameraPosition _initialCameraPosition;
+
+  LatLngBounds _pinpointMapBounds = LatLngBounds(southwest: const LatLng(0, 0), northeast: const LatLng(0, 0));
+
+  late BuildContext _context;
   late WidgetRef _ref;
 
   ///
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    _context = context;
     _ref = ref;
 
-    getLocation();
+    _setInitialCameraPosition();
+
+    _getLocation();
+
+    _makeBounds();
 
     final latLngState = ref.watch(latLngProvider);
 
@@ -42,6 +55,13 @@ class MapScreen extends ConsumerWidget {
       body: SafeArea(
         child: Stack(
           children: [
+            GoogleMap(
+              initialCameraPosition: _initialCameraPosition,
+              onMapCreated: (GoogleMapController gmcontroller) {
+                _mapController.complete(gmcontroller);
+                _fitMapBounds();
+              },
+            ),
             Column(
               children: [
                 Row(
@@ -83,7 +103,7 @@ class MapScreen extends ConsumerWidget {
   }
 
   ///
-  Future<void> getLocation() async {
+  Future<void> _getLocation() async {
     var permission = await Geolocator.checkPermission();
 
     if (permission == LocationPermission.denied) {
@@ -116,5 +136,44 @@ class MapScreen extends ConsumerWidget {
     await _ref.read(appProvider.notifier).setDistance(distance: distance);
 
     //////////////////////////////////////
+  }
+
+  ///
+  void _setInitialCameraPosition() {
+    final latLngState = _ref.watch(latLngProvider);
+    final latLng = LatLng(latLngState.lat, latLngState.lng);
+    _initialCameraPosition = CameraPosition(target: latLng, zoom: 15, tilt: 50);
+  }
+
+  ///
+  Future<void> _fitMapBounds() async {
+    final googleMap = await _mapController.future;
+
+    // ignore: use_build_context_synchronously
+    await googleMap.moveCamera(CameraUpdate.newLatLngBounds(_pinpointMapBounds, _context.screenSize.width * 0.1));
+  }
+
+  ///
+  void _makeBounds() {
+    final latList = <double>[];
+    final lngList = <double>[];
+
+    final latLngState = _ref.watch(latLngProvider);
+    latList.add(latLngState.lat);
+    lngList.add(latLngState.lng);
+
+    final selectedTrainStation = _ref.watch(trainStationProvider.select((value) => value.selectedTrainStation));
+
+    if (selectedTrainStation != null) {
+      latList.add(selectedTrainStation.lat.toDouble());
+      lngList.add(selectedTrainStation.lng.toDouble());
+    }
+
+    final minLat = latList.reduce(min);
+    final maxLat = latList.reduce(max);
+    final minLng = lngList.reduce(min);
+    final maxLng = lngList.reduce(max);
+
+    _pinpointMapBounds = LatLngBounds(northeast: LatLng(maxLat, maxLng), southwest: LatLng(minLat, minLng));
   }
 }
