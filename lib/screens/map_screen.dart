@@ -26,6 +26,10 @@ class MapScreen extends ConsumerWidget {
 
   LatLngBounds _pinpointMapBounds = LatLngBounds(southwest: const LatLng(0, 0), northeast: const LatLng(0, 0));
 
+  late Set<Marker> markers;
+
+  Set<Polyline> polylineSet = {};
+
   late BuildContext _context;
   late WidgetRef _ref;
 
@@ -51,12 +55,53 @@ class MapScreen extends ConsumerWidget {
     final timeFormat = DateFormat('HH:mm:ss');
     final currentTime = timeFormat.format(now);
 
+    //==============================
+    markers = {
+      Marker(
+        markerId: const MarkerId('here'),
+        position: LatLng(latLngState.lat, latLngState.lng),
+        infoWindow: const InfoWindow(title: 'title', snippet: 'snippet'),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
+      ),
+    };
+
+    if (selectedTrainStation != null) {
+      markers.add(
+        Marker(
+          markerId: const MarkerId('station'),
+          position: LatLng(selectedTrainStation.lat.toDouble(), selectedTrainStation.lng.toDouble()),
+          infoWindow: const InfoWindow(title: 'title', snippet: 'snippet'),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+        ),
+      );
+
+      //////////////////////////////////
+
+      polylineSet.add(
+        Polyline(
+          polylineId: const PolylineId('Here_and_Station'),
+          color: Colors.redAccent,
+          width: 5,
+          points: <LatLng>[
+            LatLng(latLngState.lat, latLngState.lng),
+            LatLng(selectedTrainStation.lat.toDouble(), selectedTrainStation.lng.toDouble()),
+          ],
+        ),
+      );
+
+      //////////////////////////////////
+    }
+
+    //==============================
+
     return Scaffold(
       body: SafeArea(
         child: Stack(
           children: [
             GoogleMap(
               initialCameraPosition: _initialCameraPosition,
+              markers: markers,
+              polylines: polylineSet,
               onMapCreated: (GoogleMapController gmcontroller) {
                 _mapController.complete(gmcontroller);
                 _fitMapBounds();
@@ -150,7 +195,7 @@ class MapScreen extends ConsumerWidget {
     final googleMap = await _mapController.future;
 
     // ignore: use_build_context_synchronously
-    await googleMap.moveCamera(CameraUpdate.newLatLngBounds(_pinpointMapBounds, _context.screenSize.width * 0.1));
+    await googleMap.moveCamera(CameraUpdate.newLatLngBounds(_pinpointMapBounds, _context.screenSize.width * 0.2));
   }
 
   ///
