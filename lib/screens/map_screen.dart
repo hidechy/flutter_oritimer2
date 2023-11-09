@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../extensions/extensions.dart';
 import '../state/app_state/app_notifier.dart';
@@ -50,10 +50,6 @@ class MapScreen extends ConsumerWidget {
     final selectedTrainStation = ref.watch(trainStationProvider.select((value) => value.selectedTrainStation));
 
     final distance = ref.watch(appProvider.select((value) => value.distance));
-
-    final now = DateTime.now();
-    final timeFormat = DateFormat('HH:mm:ss');
-    final currentTime = timeFormat.format(now);
 
     //==============================
     markers = {
@@ -122,6 +118,7 @@ class MapScreen extends ConsumerWidget {
                     strokeWidth: 2, //線の太さ
                   )
               },
+              zoomControlsEnabled: false,
             ),
             Column(
               children: [
@@ -138,23 +135,58 @@ class MapScreen extends ConsumerWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
-                Text(latLngState.lat.toString()),
-                Text(latLngState.lng.toString()),
-                const SizedBox(height: 40),
-                if (selectedTrainStation != null) ...[
-                  Text(selectedTrainStation.stationName),
-                  Text(selectedTrainStation.address),
-                  Text(selectedTrainStation.lat),
-                  Text(selectedTrainStation.lng),
-                  Text(selectedTrainStation.lineNumber),
-                  Text(selectedTrainStation.lineName),
-                ],
-                const SizedBox(height: 10),
-                Text(distance),
-                const SizedBox(height: 10),
-                Text(currentTime),
-                const SizedBox(height: 40),
+                Expanded(child: Container()),
+                Container(
+                  width: context.screenSize.width,
+                  decoration: BoxDecoration(color: Colors.black.withOpacity(0.3)),
+                  child: Row(
+                    children: [
+                      CircularCountDownTimer(
+                        duration: 10,
+                        width: context.screenSize.width / 10,
+                        height: context.screenSize.height / 10,
+                        ringColor: Colors.blueAccent,
+                        fillColor: Colors.white,
+                        onComplete: _goHomeScreen,
+                        textStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(height: 10),
+                            const Text('現在位置'),
+                            Container(
+                              decoration: BoxDecoration(color: Colors.black.withOpacity(0.4)),
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              child: Row(
+                                children: [
+                                  const Spacer(),
+                                  Text('${latLngState.lat} / ${latLngState.lng}'),
+                                  const Spacer(),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 40),
+                            if (selectedTrainStation != null) ...[
+//                    Text(selectedTrainStation.lineNumber),
+                              Text(selectedTrainStation.lineName),
+                              Text(selectedTrainStation.stationName),
+
+                              // Text(selectedTrainStation.address),
+                              // Text(selectedTrainStation.lat),
+                              // Text(selectedTrainStation.lng),
+                            ],
+                            const SizedBox(height: 10),
+                            Text(distance),
+                            const SizedBox(height: 10),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ],
@@ -237,4 +269,7 @@ class MapScreen extends ConsumerWidget {
 
     _pinpointMapBounds = LatLngBounds(northeast: LatLng(maxLat, maxLng), southwest: LatLng(minLat, minLng));
   }
+
+  ///
+  void _goHomeScreen() => Navigator.pushReplacement(_context, MaterialPageRoute(builder: (context) => MapScreen()));
 }
