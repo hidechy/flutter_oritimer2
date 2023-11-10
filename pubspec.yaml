@@ -20,6 +20,7 @@ dependencies:
   geocoding: ^2.1.1
   geolocator: ^10.1.0
   google_maps_flutter: ^2.5.0
+  grouped_list: ^5.1.2
   hooks_riverpod: ^2.4.3
   http: ^1.1.0
   intl: ^0.18.1

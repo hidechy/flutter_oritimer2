@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:grouped_list/grouped_list.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../extensions/extensions.dart';
 import '../state/app_state/app_notifier.dart';
 import '../state/lat_lng/lat_lng_notifier.dart';
 import '../state/lat_lng/lat_lng_request_state.dart';
+import '../state/prefecture_train/prefecture_train_notifier.dart';
 import '../state/train_station/train_station_notifier.dart';
 import 'alert/_oritimer_dialog.dart';
 import 'alert/train_select_alert.dart';
@@ -30,6 +32,10 @@ class HomeScreen extends ConsumerWidget {
 
     final appState = ref.watch(appProvider);
 
+    final prefectureTrainState = ref.watch(prefectureTrainProvider);
+
+//    print(prefectureTrainState.prefectureList);
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -43,6 +49,28 @@ class HomeScreen extends ConsumerWidget {
               child: Text('${latLngState.lat} / ${latLngState.lng}', style: const TextStyle(fontSize: 10)),
             ),
             const SizedBox(height: 20),
+            SizedBox(
+              height: 300,
+              child: GroupedListView<dynamic, dynamic>(
+                elements: prefectureTrainState.prefectureMapList,
+                // ignore: avoid_dynamic_calls
+                groupBy: (item) => item['areaNo'].toString(),
+                groupSeparatorBuilder: (groupValue) => Container(
+                  color: Colors.black,
+                  padding: const EdgeInsets.all(8),
+                  child: Text(groupValue),
+                ),
+                itemBuilder: (context, item) {
+                  // ignore: avoid_dynamic_calls
+                  return Text(item['prefecture']);
+                },
+                // ignore: avoid_dynamic_calls
+                groupComparator: (group1, group2) => group1.compareTo(group2),
+                // ignore: avoid_dynamic_calls
+                itemComparator: (item1, item2) => item1['prefNo'].toString().compareTo(item2['prefNo'].toString()),
+                useStickyGroupSeparators: true,
+              ),
+            ),
             ElevatedButton(
               onPressed: () async {
                 await ref.watch(appProvider.notifier).setErrorMsg(msg: '');
