@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../extensions/extensions.dart';
 import '../state/app_state/app_notifier.dart';
+import '../state/area_prefecture/area_prefecture_notifier.dart';
 import '../state/lat_lng/lat_lng_notifier.dart';
 import '../state/lat_lng/lat_lng_request_state.dart';
 import '../state/train_station/train_station_notifier.dart';
@@ -45,6 +46,8 @@ class HomeScreen extends ConsumerWidget {
                 decoration: BoxDecoration(color: Colors.blueAccent.withOpacity(0.2)),
                 child: Text('${latLngState.lat} / ${latLngState.lng}', style: const TextStyle(fontSize: 10)),
               ),
+              const SizedBox(height: 30),
+              _areaPrefectureList(),
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () async {
@@ -108,5 +111,58 @@ class HomeScreen extends ConsumerWidget {
     final param = LatLngRequestState(lat: position.latitude, lng: position.longitude);
 
     await _ref.read(latLngProvider.notifier).setLatLng(param: param);
+  }
+
+  ///
+  Widget _areaPrefectureList() {
+    final list = <Widget>[];
+
+    final areaPrefectureState = _ref.watch(areaPrefectureProvider);
+
+    final appState = _ref.watch(appProvider);
+
+    areaNameList.forEach((element) {
+      if (areaPrefectureState.areaPrefectureMap[element] != null) {
+        list.add(
+          ExpansionTile(
+            backgroundColor: Colors.blueAccent.withOpacity(0.1),
+            title: Text(
+              element,
+              style: TextStyle(
+                color: (appState.selectArea == element) ? Colors.yellowAccent : Colors.white,
+                fontSize: 12,
+              ),
+            ),
+            children: areaPrefectureState.areaPrefectureMap[element]!.map((e) {
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      e.prefecture,
+                      style: TextStyle(
+                        color: (appState.selectPrefecture == e.prefecture) ? Colors.yellowAccent : Colors.white,
+                        fontSize: 12,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        _ref.read(appProvider.notifier).setAreaAndPrefecture(area: element, prefecture: e.prefecture);
+                      },
+                      icon: const Icon(Icons.navigate_next, color: Colors.white),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        );
+      }
+
+      list.add(const SizedBox(height: 10));
+    });
+
+    return SingleChildScrollView(child: Column(children: list));
   }
 }

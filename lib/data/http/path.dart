@@ -2,7 +2,7 @@ enum APIPath {
   getTrainCompany,
   getTrainStation,
   getPrefecture,
-  getPrefectureTrain,
+  getPrefectureTrainCompany,
 }
 
 extension APIPathExtension on APIPath {
@@ -14,8 +14,8 @@ extension APIPathExtension on APIPath {
         return 'getTrainStation';
       case APIPath.getPrefecture:
         return 'getPrefecture';
-      case APIPath.getPrefectureTrain:
-        return 'getPrefectureTrain';
+      case APIPath.getPrefectureTrainCompany:
+        return 'getPrefectureTrainCompany';
     }
   }
 }
