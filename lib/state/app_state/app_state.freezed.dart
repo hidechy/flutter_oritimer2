@@ -22,6 +22,10 @@ mixin _$AppState {
   ///
   String get distance => throw _privateConstructorUsedError;
 
+  ///
+  String get selectArea => throw _privateConstructorUsedError;
+  String get selectPrefecture => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $AppStateCopyWith<AppState> get copyWith =>
       throw _privateConstructorUsedError;
@@ -32,7 +36,11 @@ abstract class $AppStateCopyWith<$Res> {
   factory $AppStateCopyWith(AppState value, $Res Function(AppState) then) =
       _$AppStateCopyWithImpl<$Res, AppState>;
   @useResult
-  $Res call({String errorMsg, String distance});
+  $Res call(
+      {String errorMsg,
+      String distance,
+      String selectArea,
+      String selectPrefecture});
 }
 
 /// @nodoc
@@ -50,6 +58,8 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
   $Res call({
     Object? errorMsg = null,
     Object? distance = null,
+    Object? selectArea = null,
+    Object? selectPrefecture = null,
   }) {
     return _then(_value.copyWith(
       errorMsg: null == errorMsg
@@ -59,6 +69,14 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
       distance: null == distance
           ? _value.distance
           : distance // ignore: cast_nullable_to_non_nullable
+              as String,
+      selectArea: null == selectArea
+          ? _value.selectArea
+          : selectArea // ignore: cast_nullable_to_non_nullable
+              as String,
+      selectPrefecture: null == selectPrefecture
+          ? _value.selectPrefecture
+          : selectPrefecture // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -72,7 +90,11 @@ abstract class _$$AppStateImplCopyWith<$Res>
       __$$AppStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String errorMsg, String distance});
+  $Res call(
+      {String errorMsg,
+      String distance,
+      String selectArea,
+      String selectPrefecture});
 }
 
 /// @nodoc
@@ -88,6 +110,8 @@ class __$$AppStateImplCopyWithImpl<$Res>
   $Res call({
     Object? errorMsg = null,
     Object? distance = null,
+    Object? selectArea = null,
+    Object? selectPrefecture = null,
   }) {
     return _then(_$AppStateImpl(
       errorMsg: null == errorMsg
@@ -98,6 +122,14 @@ class __$$AppStateImplCopyWithImpl<$Res>
           ? _value.distance
           : distance // ignore: cast_nullable_to_non_nullable
               as String,
+      selectArea: null == selectArea
+          ? _value.selectArea
+          : selectArea // ignore: cast_nullable_to_non_nullable
+              as String,
+      selectPrefecture: null == selectPrefecture
+          ? _value.selectPrefecture
+          : selectPrefecture // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -105,7 +137,11 @@ class __$$AppStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$AppStateImpl implements _AppState {
-  const _$AppStateImpl({this.errorMsg = '', this.distance = ''});
+  const _$AppStateImpl(
+      {this.errorMsg = '',
+      this.distance = '',
+      this.selectArea = '',
+      this.selectPrefecture = ''});
 
   ///
   @override
@@ -117,9 +153,17 @@ class _$AppStateImpl implements _AppState {
   @JsonKey()
   final String distance;
 
+  ///
+  @override
+  @JsonKey()
+  final String selectArea;
+  @override
+  @JsonKey()
+  final String selectPrefecture;
+
   @override
   String toString() {
-    return 'AppState(errorMsg: $errorMsg, distance: $distance)';
+    return 'AppState(errorMsg: $errorMsg, distance: $distance, selectArea: $selectArea, selectPrefecture: $selectPrefecture)';
   }
 
   @override
@@ -130,11 +174,16 @@ class _$AppStateImpl implements _AppState {
             (identical(other.errorMsg, errorMsg) ||
                 other.errorMsg == errorMsg) &&
             (identical(other.distance, distance) ||
-                other.distance == distance));
+                other.distance == distance) &&
+            (identical(other.selectArea, selectArea) ||
+                other.selectArea == selectArea) &&
+            (identical(other.selectPrefecture, selectPrefecture) ||
+                other.selectPrefecture == selectPrefecture));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorMsg, distance);
+  int get hashCode => Object.hash(
+      runtimeType, errorMsg, distance, selectArea, selectPrefecture);
 
   @JsonKey(ignore: true)
   @override
@@ -144,8 +193,11 @@ class _$AppStateImpl implements _AppState {
 }
 
 abstract class _AppState implements AppState {
-  const factory _AppState({final String errorMsg, final String distance}) =
-      _$AppStateImpl;
+  const factory _AppState(
+      {final String errorMsg,
+      final String distance,
+      final String selectArea,
+      final String selectPrefecture}) = _$AppStateImpl;
 
   @override
 
@@ -155,6 +207,12 @@ abstract class _AppState implements AppState {
 
   ///
   String get distance;
+  @override
+
+  ///
+  String get selectArea;
+  @override
+  String get selectPrefecture;
   @override
   @JsonKey(ignore: true)
   _$$AppStateImplCopyWith<_$AppStateImpl> get copyWith =>

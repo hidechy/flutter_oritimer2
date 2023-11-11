@@ -28,7 +28,7 @@ class PrefectureTrainNotifier extends StateNotifier<PrefectureTrainResponseState
     await client.post(path: APIPath.getPrefecture).then((value) {
       final list = <Prefecture>[];
 
-      final list2 = <Map<dynamic, dynamic>>[];
+      final map = <String, List<String>>{};
 
       // ignore: avoid_dynamic_calls
       for (var i = 0; i < value['data'].length.toString().toInt(); i++) {
@@ -36,15 +36,18 @@ class PrefectureTrainNotifier extends StateNotifier<PrefectureTrainResponseState
         final val = Prefecture.fromJson(value['data'][i] as Map<String, dynamic>);
         list.add(val);
 
-        final map = <dynamic, dynamic>{};
-        map['areaNo'] = val.areaNo;
-        map['area'] = val.area;
-        map['prefNo'] = val.prefNo;
-        map['prefecture'] = val.prefecture;
-        list2.add(map);
+        map[val.area] = [];
       }
 
-      state = state.copyWith(prefectureList: list, prefectureMapList: list2);
+      // ignore: avoid_dynamic_calls
+      for (var i = 0; i < value['data'].length.toString().toInt(); i++) {
+        // ignore: avoid_dynamic_calls
+        final val = Prefecture.fromJson(value['data'][i] as Map<String, dynamic>);
+
+        map[val.area]?.add(val.prefecture);
+      }
+
+      state = state.copyWith(prefectureList: list, areaPrefectureMap: map);
     }).catchError((error, _) {
       utility.showError('予期せぬエラーが発生しました');
     });

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:grouped_list/grouped_list.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../extensions/extensions.dart';
@@ -17,6 +16,8 @@ import 'map_screen.dart';
 class HomeScreen extends ConsumerWidget {
   HomeScreen({super.key});
 
+  List<String> areaNameList = ['北海道・東北', '関東', '中部', '近畿', '中国', '四国', '九州・沖縄'];
+
   late WidgetRef _ref;
 
   ///
@@ -32,84 +33,62 @@ class HomeScreen extends ConsumerWidget {
 
     final appState = ref.watch(appProvider);
 
-    final prefectureTrainState = ref.watch(prefectureTrainProvider);
-
-//    print(prefectureTrainState.prefectureList);
-
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('現在地点'),
-            Container(
-              width: context.screenSize.width,
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-              decoration: BoxDecoration(color: Colors.blueAccent.withOpacity(0.2)),
-              child: Text('${latLngState.lat} / ${latLngState.lng}', style: const TextStyle(fontSize: 10)),
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              height: 300,
-              child: GroupedListView<dynamic, dynamic>(
-                elements: prefectureTrainState.prefectureMapList,
-                // ignore: avoid_dynamic_calls
-                groupBy: (item) => item['areaNo'].toString(),
-                groupSeparatorBuilder: (groupValue) => Container(
-                  color: Colors.black,
-                  padding: const EdgeInsets.all(8),
-                  child: Text(groupValue),
-                ),
-                itemBuilder: (context, item) {
-                  // ignore: avoid_dynamic_calls
-                  return Text(item['prefecture']);
-                },
-                // ignore: avoid_dynamic_calls
-                groupComparator: (group1, group2) => group1.compareTo(group2),
-                // ignore: avoid_dynamic_calls
-                itemComparator: (item1, item2) => item1['prefNo'].toString().compareTo(item2['prefNo'].toString()),
-                useStickyGroupSeparators: true,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('現在地点'),
+              Container(
+                width: context.screenSize.width,
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                decoration: BoxDecoration(color: Colors.blueAccent.withOpacity(0.2)),
+                child: Text('${latLngState.lat} / ${latLngState.lng}', style: const TextStyle(fontSize: 10)),
               ),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                await ref.watch(appProvider.notifier).setErrorMsg(msg: '');
-
-                // ignore: use_build_context_synchronously
-                await OritimerDialog(context: context, widget: TrainSelectAlert());
-              },
-              child: const Text('station'),
-            ),
-            Container(
-              width: context.screenSize.width,
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-              decoration: BoxDecoration(color: Colors.yellowAccent.withOpacity(0.2)),
-              child: (selectedTrainStation == null || selectedTrainStation.stationName == '')
-                  ? Container()
-                  : DefaultTextStyle(
-                      style: const TextStyle(fontSize: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(selectedTrainStation.stationName),
-                          Text(selectedTrainStation.address),
-                          Text(
-                            '${selectedTrainStation.lat} / ${selectedTrainStation.lng}',
-                            style: const TextStyle(fontSize: 8),
-                          ),
-                          if (appState.distance != '') Text(appState.distance),
-                        ],
-                      ),
-                    ),
-            ),
-            if (appState.distance != '') ...[
+              const SizedBox(height: 20),
+              _displayAreaAndPrefectureList(),
               const SizedBox(height: 30),
               ElevatedButton(
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => MapScreen())),
-                child: const Text('map'),
+                onPressed: () async {
+                  await ref.watch(appProvider.notifier).setErrorMsg(msg: '');
+
+                  // ignore: use_build_context_synchronously
+                  await OritimerDialog(context: context, widget: TrainSelectAlert());
+                },
+                child: const Text('station'),
               ),
+              Container(
+                width: context.screenSize.width,
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                decoration: BoxDecoration(color: Colors.yellowAccent.withOpacity(0.2)),
+                child: (selectedTrainStation == null || selectedTrainStation.stationName == '')
+                    ? Container()
+                    : DefaultTextStyle(
+                        style: const TextStyle(fontSize: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(selectedTrainStation.stationName),
+                            Text(selectedTrainStation.address),
+                            Text(
+                              '${selectedTrainStation.lat} / ${selectedTrainStation.lng}',
+                              style: const TextStyle(fontSize: 8),
+                            ),
+                            if (appState.distance != '') Text(appState.distance),
+                          ],
+                        ),
+                      ),
+              ),
+              if (appState.distance != '') ...[
+                const SizedBox(height: 30),
+                ElevatedButton(
+                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => MapScreen())),
+                  child: const Text('map'),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
@@ -132,5 +111,42 @@ class HomeScreen extends ConsumerWidget {
     final param = LatLngRequestState(lat: position.latitude, lng: position.longitude);
 
     await _ref.read(latLngProvider.notifier).setLatLng(param: param);
+  }
+
+  ///
+  Widget _displayAreaAndPrefectureList() {
+    final list = <Widget>[];
+
+    final appState = _ref.watch(appProvider);
+
+    _ref.watch(prefectureTrainProvider.select((value) => value.areaPrefectureMap)).forEach((key, value) {
+      list.add(
+        ExpansionTile(
+          backgroundColor: Colors.blueAccent.withOpacity(0.1),
+          title: Text(key,
+              style: TextStyle(color: (key == appState.selectArea) ? Colors.yellowAccent : Colors.white, fontSize: 12)),
+          children: value.map((e) {
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    e,
+                    style: TextStyle(color: (e == appState.selectPrefecture) ? Colors.yellowAccent : Colors.white),
+                  ),
+                  IconButton(
+                    onPressed: () => _ref.read(appProvider.notifier).setAreaAndPrefecture(area: key, prefecture: e),
+                    icon: const Icon(Icons.navigate_next, color: Colors.white),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ),
+      );
+    });
+
+    return SingleChildScrollView(child: Column(children: list));
   }
 }

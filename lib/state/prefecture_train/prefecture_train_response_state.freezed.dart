@@ -19,7 +19,7 @@ mixin _$PrefectureTrainResponseState {
   List<Prefecture> get prefectureList => throw _privateConstructorUsedError;
   List<PrefectureTrain> get prefectureTrainList =>
       throw _privateConstructorUsedError;
-  List<Map<dynamic, dynamic>> get prefectureMapList =>
+  Map<String, List<String>> get areaPrefectureMap =>
       throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -38,7 +38,7 @@ abstract class $PrefectureTrainResponseStateCopyWith<$Res> {
   $Res call(
       {List<Prefecture> prefectureList,
       List<PrefectureTrain> prefectureTrainList,
-      List<Map<dynamic, dynamic>> prefectureMapList});
+      Map<String, List<String>> areaPrefectureMap});
 }
 
 /// @nodoc
@@ -57,7 +57,7 @@ class _$PrefectureTrainResponseStateCopyWithImpl<$Res,
   $Res call({
     Object? prefectureList = null,
     Object? prefectureTrainList = null,
-    Object? prefectureMapList = null,
+    Object? areaPrefectureMap = null,
   }) {
     return _then(_value.copyWith(
       prefectureList: null == prefectureList
@@ -68,10 +68,10 @@ class _$PrefectureTrainResponseStateCopyWithImpl<$Res,
           ? _value.prefectureTrainList
           : prefectureTrainList // ignore: cast_nullable_to_non_nullable
               as List<PrefectureTrain>,
-      prefectureMapList: null == prefectureMapList
-          ? _value.prefectureMapList
-          : prefectureMapList // ignore: cast_nullable_to_non_nullable
-              as List<Map<dynamic, dynamic>>,
+      areaPrefectureMap: null == areaPrefectureMap
+          ? _value.areaPrefectureMap
+          : areaPrefectureMap // ignore: cast_nullable_to_non_nullable
+              as Map<String, List<String>>,
     ) as $Val);
   }
 }
@@ -88,7 +88,7 @@ abstract class _$$PrefectureTrainResponseStateImplCopyWith<$Res>
   $Res call(
       {List<Prefecture> prefectureList,
       List<PrefectureTrain> prefectureTrainList,
-      List<Map<dynamic, dynamic>> prefectureMapList});
+      Map<String, List<String>> areaPrefectureMap});
 }
 
 /// @nodoc
@@ -106,7 +106,7 @@ class __$$PrefectureTrainResponseStateImplCopyWithImpl<$Res>
   $Res call({
     Object? prefectureList = null,
     Object? prefectureTrainList = null,
-    Object? prefectureMapList = null,
+    Object? areaPrefectureMap = null,
   }) {
     return _then(_$PrefectureTrainResponseStateImpl(
       prefectureList: null == prefectureList
@@ -117,10 +117,10 @@ class __$$PrefectureTrainResponseStateImplCopyWithImpl<$Res>
           ? _value._prefectureTrainList
           : prefectureTrainList // ignore: cast_nullable_to_non_nullable
               as List<PrefectureTrain>,
-      prefectureMapList: null == prefectureMapList
-          ? _value._prefectureMapList
-          : prefectureMapList // ignore: cast_nullable_to_non_nullable
-              as List<Map<dynamic, dynamic>>,
+      areaPrefectureMap: null == areaPrefectureMap
+          ? _value._areaPrefectureMap
+          : areaPrefectureMap // ignore: cast_nullable_to_non_nullable
+              as Map<String, List<String>>,
     ));
   }
 }
@@ -132,10 +132,10 @@ class _$PrefectureTrainResponseStateImpl
   const _$PrefectureTrainResponseStateImpl(
       {final List<Prefecture> prefectureList = const [],
       final List<PrefectureTrain> prefectureTrainList = const [],
-      final List<Map<dynamic, dynamic>> prefectureMapList = const []})
+      final Map<String, List<String>> areaPrefectureMap = const {}})
       : _prefectureList = prefectureList,
         _prefectureTrainList = prefectureTrainList,
-        _prefectureMapList = prefectureMapList;
+        _areaPrefectureMap = areaPrefectureMap;
 
   final List<Prefecture> _prefectureList;
   @override
@@ -156,19 +156,19 @@ class _$PrefectureTrainResponseStateImpl
     return EqualUnmodifiableListView(_prefectureTrainList);
   }
 
-  final List<Map<dynamic, dynamic>> _prefectureMapList;
+  final Map<String, List<String>> _areaPrefectureMap;
   @override
   @JsonKey()
-  List<Map<dynamic, dynamic>> get prefectureMapList {
-    if (_prefectureMapList is EqualUnmodifiableListView)
-      return _prefectureMapList;
+  Map<String, List<String>> get areaPrefectureMap {
+    if (_areaPrefectureMap is EqualUnmodifiableMapView)
+      return _areaPrefectureMap;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_prefectureMapList);
+    return EqualUnmodifiableMapView(_areaPrefectureMap);
   }
 
   @override
   String toString() {
-    return 'PrefectureTrainResponseState(prefectureList: $prefectureList, prefectureTrainList: $prefectureTrainList, prefectureMapList: $prefectureMapList)';
+    return 'PrefectureTrainResponseState(prefectureList: $prefectureList, prefectureTrainList: $prefectureTrainList, areaPrefectureMap: $areaPrefectureMap)';
   }
 
   @override
@@ -181,7 +181,7 @@ class _$PrefectureTrainResponseStateImpl
             const DeepCollectionEquality()
                 .equals(other._prefectureTrainList, _prefectureTrainList) &&
             const DeepCollectionEquality()
-                .equals(other._prefectureMapList, _prefectureMapList));
+                .equals(other._areaPrefectureMap, _areaPrefectureMap));
   }
 
   @override
@@ -189,7 +189,7 @@ class _$PrefectureTrainResponseStateImpl
       runtimeType,
       const DeepCollectionEquality().hash(_prefectureList),
       const DeepCollectionEquality().hash(_prefectureTrainList),
-      const DeepCollectionEquality().hash(_prefectureMapList));
+      const DeepCollectionEquality().hash(_areaPrefectureMap));
 
   @JsonKey(ignore: true)
   @override
@@ -205,7 +205,7 @@ abstract class _PrefectureTrainResponseState
   const factory _PrefectureTrainResponseState(
           {final List<Prefecture> prefectureList,
           final List<PrefectureTrain> prefectureTrainList,
-          final List<Map<dynamic, dynamic>> prefectureMapList}) =
+          final Map<String, List<String>> areaPrefectureMap}) =
       _$PrefectureTrainResponseStateImpl;
 
   @override
@@ -213,7 +213,7 @@ abstract class _PrefectureTrainResponseState
   @override
   List<PrefectureTrain> get prefectureTrainList;
   @override
-  List<Map<dynamic, dynamic>> get prefectureMapList;
+  Map<String, List<String>> get areaPrefectureMap;
   @override
   @JsonKey(ignore: true)
   _$$PrefectureTrainResponseStateImplCopyWith<

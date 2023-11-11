@@ -10,6 +10,6 @@ class PrefectureTrainResponseState with _$PrefectureTrainResponseState {
   const factory PrefectureTrainResponseState({
     @Default([]) List<Prefecture> prefectureList,
     @Default([]) List<PrefectureTrain> prefectureTrainList,
-    @Default([]) List<Map<dynamic, dynamic>> prefectureMapList,
+    @Default({}) Map<String, List<String>> areaPrefectureMap,
   }) = _PrefectureTrainResponseState;
 }
