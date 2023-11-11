@@ -6,7 +6,6 @@ import '../extensions/extensions.dart';
 import '../state/app_state/app_notifier.dart';
 import '../state/lat_lng/lat_lng_notifier.dart';
 import '../state/lat_lng/lat_lng_request_state.dart';
-import '../state/prefecture_train/prefecture_train_notifier.dart';
 import '../state/train_station/train_station_notifier.dart';
 import 'alert/_oritimer_dialog.dart';
 import 'alert/train_select_alert.dart';
@@ -46,8 +45,6 @@ class HomeScreen extends ConsumerWidget {
                 decoration: BoxDecoration(color: Colors.blueAccent.withOpacity(0.2)),
                 child: Text('${latLngState.lat} / ${latLngState.lng}', style: const TextStyle(fontSize: 10)),
               ),
-              const SizedBox(height: 20),
-              _displayAreaAndPrefectureList(),
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () async {
@@ -111,42 +108,5 @@ class HomeScreen extends ConsumerWidget {
     final param = LatLngRequestState(lat: position.latitude, lng: position.longitude);
 
     await _ref.read(latLngProvider.notifier).setLatLng(param: param);
-  }
-
-  ///
-  Widget _displayAreaAndPrefectureList() {
-    final list = <Widget>[];
-
-    final appState = _ref.watch(appProvider);
-
-    _ref.watch(prefectureTrainProvider.select((value) => value.areaPrefectureMap)).forEach((key, value) {
-      list.add(
-        ExpansionTile(
-          backgroundColor: Colors.blueAccent.withOpacity(0.1),
-          title: Text(key,
-              style: TextStyle(color: (key == appState.selectArea) ? Colors.yellowAccent : Colors.white, fontSize: 12)),
-          children: value.map((e) {
-            return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    e,
-                    style: TextStyle(color: (e == appState.selectPrefecture) ? Colors.yellowAccent : Colors.white),
-                  ),
-                  IconButton(
-                    onPressed: () => _ref.read(appProvider.notifier).setAreaAndPrefecture(area: key, prefecture: e),
-                    icon: const Icon(Icons.navigate_next, color: Colors.white),
-                  ),
-                ],
-              ),
-            );
-          }).toList(),
-        ),
-      );
-    });
-
-    return SingleChildScrollView(child: Column(children: list));
   }
 }
