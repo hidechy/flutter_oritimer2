@@ -57,7 +57,7 @@ class MapScreen extends ConsumerWidget {
         markerId: const MarkerId('here'),
         position: LatLng(latLngState.lat, latLngState.lng),
         infoWindow: const InfoWindow(title: 'title', snippet: 'snippet'),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
       ),
     };
 
@@ -69,7 +69,7 @@ class MapScreen extends ConsumerWidget {
           markerId: const MarkerId('station'),
           position: LatLng(selectedTrainStation.lat.toDouble(), selectedTrainStation.lng.toDouble()),
           infoWindow: const InfoWindow(title: 'title', snippet: 'snippet'),
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
         ),
       );
 
