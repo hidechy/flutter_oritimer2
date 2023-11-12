@@ -1,9 +1,7 @@
 // ignore_for_file: must_be_immutable, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:konoeki_de_oritimer/models/train_station.dart';
 
 import '../../extensions/extensions.dart';
 import '../../models/train_company.dart';
