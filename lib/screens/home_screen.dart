@@ -47,6 +47,17 @@ class HomeScreen extends ConsumerWidget {
                 child: Text('${latLngState.lat} / ${latLngState.lng}', style: const TextStyle(fontSize: 10)),
               ),
               const SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(),
+                  GestureDetector(
+                    onTap: () => _ref.read(appProvider.notifier).setAreaAndPrefecture(area: '', prefecture: ''),
+                    child: const Text('clear'),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
               _areaPrefectureList(),
               const SizedBox(height: 30),
               ElevatedButton(
@@ -147,8 +158,14 @@ class HomeScreen extends ConsumerWidget {
                       ),
                     ),
                     IconButton(
-                      onPressed: () {
-                        _ref.read(appProvider.notifier).setAreaAndPrefecture(area: element, prefecture: e.prefecture);
+                      onPressed: () async {
+                        await _ref
+                            .read(appProvider.notifier)
+                            .setAreaAndPrefecture(area: element, prefecture: e.prefecture);
+
+                        await _ref
+                            .read(areaPrefectureProvider.notifier)
+                            .getAreaPrefectureCompany(prefecture: e.prefecture);
                       },
                       icon: const Icon(Icons.navigate_next, color: Colors.white),
                     ),

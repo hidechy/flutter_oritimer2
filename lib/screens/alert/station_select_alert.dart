@@ -1,7 +1,9 @@
 // ignore_for_file: must_be_immutable, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:konoeki_de_oritimer/models/train_station.dart';
 
 import '../../extensions/extensions.dart';
 import '../../models/train_company.dart';
@@ -26,6 +28,8 @@ class StationSelectAlert extends ConsumerWidget {
     _context = context;
     _ref = ref;
 
+    final prefecture = ref.watch(appProvider.select((value) => value.selectPrefecture));
+
     return AlertDialog(
       titlePadding: EdgeInsets.zero,
       contentPadding: EdgeInsets.zero,
@@ -42,7 +46,13 @@ class StationSelectAlert extends ConsumerWidget {
             children: [
               const SizedBox(height: 20),
               Container(width: context.screenSize.width),
-              Text(train.trainName),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(train.trainName),
+                  Text('（$prefecture）'),
+                ],
+              ),
               Divider(color: Colors.white.withOpacity(0.4), thickness: 5),
               Expanded(child: displayStation()),
             ],

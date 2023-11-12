@@ -20,6 +20,7 @@ mixin _$AreaPrefectureResponseState {
       throw _privateConstructorUsedError;
   Map<String, List<AreaPrefecture>> get areaPrefectureMap =>
       throw _privateConstructorUsedError;
+  List<TrainCompany> get trainCompanyList => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AreaPrefectureResponseStateCopyWith<AreaPrefectureResponseState>
@@ -36,7 +37,8 @@ abstract class $AreaPrefectureResponseStateCopyWith<$Res> {
   @useResult
   $Res call(
       {List<AreaPrefecture> areaPrefectureList,
-      Map<String, List<AreaPrefecture>> areaPrefectureMap});
+      Map<String, List<AreaPrefecture>> areaPrefectureMap,
+      List<TrainCompany> trainCompanyList});
 }
 
 /// @nodoc
@@ -55,6 +57,7 @@ class _$AreaPrefectureResponseStateCopyWithImpl<$Res,
   $Res call({
     Object? areaPrefectureList = null,
     Object? areaPrefectureMap = null,
+    Object? trainCompanyList = null,
   }) {
     return _then(_value.copyWith(
       areaPrefectureList: null == areaPrefectureList
@@ -65,6 +68,10 @@ class _$AreaPrefectureResponseStateCopyWithImpl<$Res,
           ? _value.areaPrefectureMap
           : areaPrefectureMap // ignore: cast_nullable_to_non_nullable
               as Map<String, List<AreaPrefecture>>,
+      trainCompanyList: null == trainCompanyList
+          ? _value.trainCompanyList
+          : trainCompanyList // ignore: cast_nullable_to_non_nullable
+              as List<TrainCompany>,
     ) as $Val);
   }
 }
@@ -80,7 +87,8 @@ abstract class _$$AreaPrefectureResponseStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {List<AreaPrefecture> areaPrefectureList,
-      Map<String, List<AreaPrefecture>> areaPrefectureMap});
+      Map<String, List<AreaPrefecture>> areaPrefectureMap,
+      List<TrainCompany> trainCompanyList});
 }
 
 /// @nodoc
@@ -98,6 +106,7 @@ class __$$AreaPrefectureResponseStateImplCopyWithImpl<$Res>
   $Res call({
     Object? areaPrefectureList = null,
     Object? areaPrefectureMap = null,
+    Object? trainCompanyList = null,
   }) {
     return _then(_$AreaPrefectureResponseStateImpl(
       areaPrefectureList: null == areaPrefectureList
@@ -108,6 +117,10 @@ class __$$AreaPrefectureResponseStateImplCopyWithImpl<$Res>
           ? _value._areaPrefectureMap
           : areaPrefectureMap // ignore: cast_nullable_to_non_nullable
               as Map<String, List<AreaPrefecture>>,
+      trainCompanyList: null == trainCompanyList
+          ? _value._trainCompanyList
+          : trainCompanyList // ignore: cast_nullable_to_non_nullable
+              as List<TrainCompany>,
     ));
   }
 }
@@ -118,9 +131,11 @@ class _$AreaPrefectureResponseStateImpl
     implements _AreaPrefectureResponseState {
   const _$AreaPrefectureResponseStateImpl(
       {final List<AreaPrefecture> areaPrefectureList = const [],
-      final Map<String, List<AreaPrefecture>> areaPrefectureMap = const {}})
+      final Map<String, List<AreaPrefecture>> areaPrefectureMap = const {},
+      final List<TrainCompany> trainCompanyList = const []})
       : _areaPrefectureList = areaPrefectureList,
-        _areaPrefectureMap = areaPrefectureMap;
+        _areaPrefectureMap = areaPrefectureMap,
+        _trainCompanyList = trainCompanyList;
 
   final List<AreaPrefecture> _areaPrefectureList;
   @override
@@ -142,9 +157,19 @@ class _$AreaPrefectureResponseStateImpl
     return EqualUnmodifiableMapView(_areaPrefectureMap);
   }
 
+  final List<TrainCompany> _trainCompanyList;
+  @override
+  @JsonKey()
+  List<TrainCompany> get trainCompanyList {
+    if (_trainCompanyList is EqualUnmodifiableListView)
+      return _trainCompanyList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_trainCompanyList);
+  }
+
   @override
   String toString() {
-    return 'AreaPrefectureResponseState(areaPrefectureList: $areaPrefectureList, areaPrefectureMap: $areaPrefectureMap)';
+    return 'AreaPrefectureResponseState(areaPrefectureList: $areaPrefectureList, areaPrefectureMap: $areaPrefectureMap, trainCompanyList: $trainCompanyList)';
   }
 
   @override
@@ -155,14 +180,17 @@ class _$AreaPrefectureResponseStateImpl
             const DeepCollectionEquality()
                 .equals(other._areaPrefectureList, _areaPrefectureList) &&
             const DeepCollectionEquality()
-                .equals(other._areaPrefectureMap, _areaPrefectureMap));
+                .equals(other._areaPrefectureMap, _areaPrefectureMap) &&
+            const DeepCollectionEquality()
+                .equals(other._trainCompanyList, _trainCompanyList));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_areaPrefectureList),
-      const DeepCollectionEquality().hash(_areaPrefectureMap));
+      const DeepCollectionEquality().hash(_areaPrefectureMap),
+      const DeepCollectionEquality().hash(_trainCompanyList));
 
   @JsonKey(ignore: true)
   @override
@@ -176,13 +204,16 @@ abstract class _AreaPrefectureResponseState
     implements AreaPrefectureResponseState {
   const factory _AreaPrefectureResponseState(
           {final List<AreaPrefecture> areaPrefectureList,
-          final Map<String, List<AreaPrefecture>> areaPrefectureMap}) =
+          final Map<String, List<AreaPrefecture>> areaPrefectureMap,
+          final List<TrainCompany> trainCompanyList}) =
       _$AreaPrefectureResponseStateImpl;
 
   @override
   List<AreaPrefecture> get areaPrefectureList;
   @override
   Map<String, List<AreaPrefecture>> get areaPrefectureMap;
+  @override
+  List<TrainCompany> get trainCompanyList;
   @override
   @JsonKey(ignore: true)
   _$$AreaPrefectureResponseStateImplCopyWith<_$AreaPrefectureResponseStateImpl>
