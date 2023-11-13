@@ -26,6 +26,7 @@ class TrainStation {
     required this.lng,
     required this.lineNumber,
     required this.lineName,
+    required this.prefecture,
   });
 
   factory TrainStation.fromJson(Map<String, dynamic> json) => TrainStation(
@@ -36,6 +37,7 @@ class TrainStation {
         lng: json['lng'],
         lineNumber: json['line_number'],
         lineName: json['line_name'],
+        prefecture: json['prefecture'],
       );
   int id;
   String stationName;
@@ -44,6 +46,7 @@ class TrainStation {
   String lng;
   String lineNumber;
   String lineName;
+  String prefecture;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -53,5 +56,6 @@ class TrainStation {
         'lng': lng,
         'line_number': lineNumber,
         'line_name': lineName,
+        'prefecture': prefecture,
       };
 }

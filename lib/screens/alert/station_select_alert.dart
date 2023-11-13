@@ -83,6 +83,7 @@ class StationSelectAlert extends ConsumerWidget {
                   Text(element.stationName),
                   Text(element.address),
                   Text('${element.lat} / ${element.lng}', style: const TextStyle(fontSize: 8)),
+                  Text(element.prefecture),
                 ],
               ),
               GestureDetector(
