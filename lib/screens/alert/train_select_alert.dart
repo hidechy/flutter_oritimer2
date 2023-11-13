@@ -7,6 +7,7 @@ import 'package:konoeki_de_oritimer/screens/alert/station_select_alert.dart';
 import 'package:konoeki_de_oritimer/state/train_station/train_station_notifier.dart';
 
 import '../../extensions/extensions.dart';
+import '../../state/area_prefecture/area_prefecture_notifier.dart';
 import '../../state/train_company/train_company_notifier.dart';
 
 class TrainSelectAlert extends ConsumerWidget {
@@ -93,7 +94,17 @@ class TrainSelectAlert extends ConsumerWidget {
 
     final selectedCompanyName = _ref.watch(trainCompanyProvider.select((value) => value.selectedCompanyName));
 
-    _ref.watch(trainCompanyProvider.select((value) => value.trainCompanyList)).forEach((element) {
+    //=====================//
+    var trainCompanyList = _ref.watch(trainCompanyProvider.select((value) => value.trainCompanyList));
+
+    final traincompanylistPref = _ref.watch(areaPrefectureProvider.select((value) => value.trainCompanyList));
+
+    if (traincompanylistPref.isNotEmpty) {
+      trainCompanyList = traincompanylistPref;
+    }
+    //=====================//
+
+    trainCompanyList.forEach((element) {
       list.add(
         Container(
           padding: const EdgeInsets.all(10),
@@ -149,7 +160,7 @@ class TrainSelectAlert extends ConsumerWidget {
                       .read(trainCompanyProvider.notifier)
                       .setSelectedTrainNumber(selectedTrainNumber: element.trainNumber);
 
-                  await _ref.read(trainStationProvider.notifier).getTrainStation(param: element.trainNumber);
+                  await _ref.read(trainStationProvider.notifier).getTrainStation(trainNumber: element.trainNumber);
 
                   await OritimerDialog(context: _context, widget: StationSelectAlert(train: element));
                 },

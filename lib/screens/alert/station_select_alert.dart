@@ -26,6 +26,8 @@ class StationSelectAlert extends ConsumerWidget {
     _context = context;
     _ref = ref;
 
+    final prefecture = ref.watch(appProvider.select((value) => value.selectPrefecture));
+
     return AlertDialog(
       titlePadding: EdgeInsets.zero,
       contentPadding: EdgeInsets.zero,
@@ -42,7 +44,13 @@ class StationSelectAlert extends ConsumerWidget {
             children: [
               const SizedBox(height: 20),
               Container(width: context.screenSize.width),
-              Text(train.trainName),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(train.trainName),
+                  Text('（$prefecture）'),
+                ],
+              ),
               Divider(color: Colors.white.withOpacity(0.4), thickness: 5),
               Expanded(child: displayStation()),
             ],
@@ -75,6 +83,7 @@ class StationSelectAlert extends ConsumerWidget {
                   Text(element.stationName),
                   Text(element.address),
                   Text('${element.lat} / ${element.lng}', style: const TextStyle(fontSize: 8)),
+                  Text(element.prefecture),
                 ],
               ),
               GestureDetector(

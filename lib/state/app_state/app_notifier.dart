@@ -15,6 +15,10 @@ class AppNotifier extends StateNotifier<AppState> {
 
   ///
   Future<void> setDistance({required String distance}) async => state = state.copyWith(distance: distance);
+
+  ///
+  Future<void> setAreaAndPrefecture({required String area, required String prefecture}) async =>
+      state = state.copyWith(selectArea: area, selectPrefecture: prefecture);
 }
 
 ////////////////////////////////////////////////

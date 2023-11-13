@@ -10,5 +10,9 @@ class AppState with _$AppState {
 
     ///
     @Default('') String distance,
+
+    ///
+    @Default('') String selectArea,
+    @Default('') String selectPrefecture,
   }) = _AppState;
 }

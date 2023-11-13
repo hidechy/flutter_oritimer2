@@ -35,9 +35,6 @@ class HomeScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('aaaaa'),
-
-
             const Text('現在地点'),
             Container(
               width: context.screenSize.width,
