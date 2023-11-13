@@ -130,12 +130,25 @@ class HomeScreen extends ConsumerWidget {
 
     final areaPrefectureState = _ref.watch(areaPrefectureProvider);
 
+    //====================================//
+    var areaList = areaNameList;
+
     final appState = _ref.watch(appProvider);
 
-    areaNameList.forEach((element) {
+    var initExpanded = false;
+
+    if (appState.selectArea != '') {
+      areaList = [appState.selectArea];
+
+      initExpanded = true;
+    }
+    //====================================//
+
+    areaList.forEach((element) {
       if (areaPrefectureState.areaPrefectureMap[element] != null) {
         list.add(
           ExpansionTile(
+            initiallyExpanded: initExpanded,
             backgroundColor: Colors.blueAccent.withOpacity(0.1),
             title: Text(
               element,
