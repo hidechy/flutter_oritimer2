@@ -25,8 +25,8 @@ class TrainStationNotifier extends StateNotifier<TrainStationResponseState> {
   final Utility utility;
 
   ///
-  Future<void> getTrainStation({required String param}) async {
-    await client.post(path: APIPath.getTrainStation, body: {'train_number': param}).then((value) {
+  Future<void> getTrainStation({required String trainNumber}) async {
+    await client.post(path: APIPath.getTrainStation, body: {'train_number': trainNumber}).then((value) {
       final list = <TrainStation>[];
       final map = <String, TrainStation>{};
 

@@ -160,7 +160,7 @@ class TrainSelectAlert extends ConsumerWidget {
                       .read(trainCompanyProvider.notifier)
                       .setSelectedTrainNumber(selectedTrainNumber: element.trainNumber);
 
-                  await _ref.read(trainStationProvider.notifier).getTrainStation(param: element.trainNumber);
+                  await _ref.read(trainStationProvider.notifier).getTrainStation(trainNumber: element.trainNumber);
 
                   await OritimerDialog(context: _context, widget: StationSelectAlert(train: element));
                 },
